@@ -33,6 +33,47 @@ fetch(`${location.protocol}//${location.host}/recipes.json`).then(
     }
 );
 
+function clearDisplay (){
+    [...table.children].forEach((child)=>{
+        child.remove();
+    })
+}
+
+function updateRecipeDisplay (data){
+    clearDisplay();
+    let hr = document.createElement("tr");
+    let ct;
+    for (let entry in data){
+        let tr = document.createElement("tr");
+        
+        let row = data[entry];
+        let ul,td;
+        for (let item in row){
+            if (ct != recipes[item]["craftingtier"]){
+                if(ct == undefined){
+                    for(let i = recipes[item]["craftingtier"]; i >= 0; i--){
+                        let th = document.createElement("th");
+                        th.textContent = `Crafting Tier ${i}`;
+                        hr.appendChild(th);
+                    }
+                    table.appendChild(hr);
+                }
+                ct = recipes[item]["craftingtier"];
+                td = document.createElement("td");
+                ul = document.createElement("ul");
+                td.appendChild(ul);
+                tr.appendChild(td);
+            }
+            let li = document.createElement("li");
+            li.textContent = `${item} ${row[item]}`;
+            ul.appendChild(li);
+        }
+
+        table.appendChild(tr);
+    }
+
+}
+
 
 function calcTierColour(totalTiers, thisTier) {
     let colourrange = 255 * 3 / totalTiers;
@@ -102,7 +143,7 @@ function selectRecipe(event) {
         //         table.textContent=JSON.stringify(recipes[current]);
         let result = addRecipeStage(current, 1);
         console.log(current, JSON.stringify(result));
-
+        updateRecipeDisplay(result);
     }
 }
 

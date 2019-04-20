@@ -17,15 +17,20 @@ aside li:hover {
 
 aside {
     width: 19%;
+    height: calc(100% - 130px);
     display: inline-block;
     padding-right: 10px;
     background: #fff;
+    overflow-y: scroll;
 }
 
 article {
     width: 80%;
     top: 0;
     display: inline-block;
+    height: calc(100% - 130px);
+    overflow:hidden;
+    background-color: #100806;
 }
 
 header {
@@ -46,5 +51,23 @@ header a {
 
 body {
     margin: 0;
-    background-color: #100806;
+    overflow:hidden;
+}
+
+
+article table {
+    width:100%;
+    height:100%;
+}
+article table td {
+    color: white;
+}
+
+article table tr:nth-child(1) {
+    background-color: white;
+}
+
+footer{
+    background-color: #fff;
+    text-align:right;
 }
