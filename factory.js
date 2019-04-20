@@ -33,25 +33,25 @@ fetch(`${location.protocol}//${location.host}/recipes.json`).then(
     }
 );
 
-function clearDisplay (){
-    [...table.children].forEach((child)=>{
+function clearDisplay() {
+    [...table.children].forEach((child) => {
         child.remove();
     })
 }
 
-function updateRecipeDisplay (data){
+function updateRecipeDisplay(data) {
     clearDisplay();
     let hr = document.createElement("tr");
     let ct;
-    for (let entry in data){
+    for (let entry in data) {
         let tr = document.createElement("tr");
-        
+
         let row = data[entry];
-        let ul,td;
-        for (let item in row){
-            if (ct != recipes[item]["craftingtier"]){
-                if(ct == undefined){
-                    for(let i = recipes[item]["craftingtier"]; i >= 0; i--){
+        let ul, td;
+        for (let item in row) {
+            if (ct != recipes[item]["craftingtier"]) {
+                if (ct == undefined) {
+                    for (let i = recipes[item]["craftingtier"]; i >= 0; i--) {
                         let th = document.createElement("th");
                         th.textContent = `Crafting Tier ${i}`;
                         hr.appendChild(th);
@@ -105,9 +105,9 @@ function calcTiers() {
 
         for (let comp in recipes[recipe]) {
             let num = 0;
-              if(comp == "craftingtier"){
+            if (comp == "craftingtier") {
                 break
-              }
+            }
             for (let prop in recipes[recipe][comp]) {
                 if (recipes[prop]) {
                     num = Math.max(num, 1, recipes[prop]["craftingtier"] + 1);
@@ -115,11 +115,11 @@ function calcTiers() {
             }
             if (recipes[recipe]["craftingtier"]) {
                 if (init != num) {
-//                     console.log(`Setting '${recipe}' to tier ${Math.min(num, recipes[recipe]["craftingtier"])}`);
+                    //                     console.log(`Setting '${recipe}' to tier ${Math.min(num, recipes[recipe]["craftingtier"])}`);
                     recipes[recipe]["craftingtier"] = Math.min(num, recipes[recipe]["craftingtier"]);
                 }
             } else {
-//                 console.log(`Setting '${recipe}' to tier ${num}`);
+                //                 console.log(`Setting '${recipe}' to tier ${num}`);
                 recipes[recipe]["craftingtier"] = num;
             }
             craftingtiers = Math.max(num + 1, craftingtiers);
@@ -152,7 +152,7 @@ function addRecipeStage(data, quantity) {
 
     let recipeOptions = recipes[data];
     for (let opt in recipeOptions) {
-        if(!recipeOptions[opt] || recipeOptions[opt].constructor.name != "Object"){
+        if (!recipeOptions[opt] || recipeOptions[opt].constructor.name != "Object") {
             break;
         }
         let recipe = recipeOptions[opt];
@@ -161,14 +161,14 @@ function addRecipeStage(data, quantity) {
         init[data] = quantity;
         let variations = [init];
 
-//         determine the number of times this recipe needs to be executed.
-        let multiple = Math.ceil(quantity/recipe["Makes"]);
+        //         determine the number of times this recipe needs to be executed.
+        let multiple = Math.ceil(quantity / recipe["Makes"]);
 
         //         Get the component stages
         for (let component in recipe) {
             let localvariations = [];
             if (recipes[component]) {
-                let subcomponents = addRecipeStage(component, recipe[component]*multiple);
+                let subcomponents = addRecipeStage(component, recipe[component] * multiple);
                 for (let thing in subcomponents) {
                     for (let item in variations) {
                         localvariations.push(jsonAdd({ ...variations[item] }, subcomponents[thing]));
