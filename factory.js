@@ -74,11 +74,11 @@ function calcTiers() {
             }
             if (recipes[recipe]["craftingtier"]) {
                 if (init != num) {
-                    console.log(`Setting '${recipe}' to tier ${Math.min(num, recipes[recipe]["craftingtier"])}`);
+//                     console.log(`Setting '${recipe}' to tier ${Math.min(num, recipes[recipe]["craftingtier"])}`);
                     recipes[recipe]["craftingtier"] = Math.min(num, recipes[recipe]["craftingtier"]);
                 }
             } else {
-                console.log(`Setting '${recipe}' to tier ${num}`);
+//                 console.log(`Setting '${recipe}' to tier ${num}`);
                 recipes[recipe]["craftingtier"] = num;
             }
             craftingtiers = Math.max(num + 1, craftingtiers);

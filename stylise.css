@@ -1,5 +1,6 @@
 aside ul {
     padding: 0;
+    margin: 0;
 }
 
 aside li {
@@ -11,12 +12,14 @@ aside li {
 }
 
 aside li:hover {
-    background: rgba(0, 0, 0, 0.2);
+    background-color: rgba(0, 0, 0, 0.2) !important;
 }
 
 aside {
     width: 19%;
     display: inline-block;
+    padding-right: 10px;
+    background: #fff;
 }
 
 article {
@@ -28,12 +31,13 @@ article {
 header {
     text-align: center;
     padding: 20px;
-    background-color: aqua;
+    background-color: #fff;
 }
 
-header h1 {
+header img {
     font-size: 4em;
-    margin: 0
+    margin: 0;
+    height: 70px;
 }
 
 header a {
@@ -42,4 +46,5 @@ header a {
 
 body {
     margin: 0;
+    background-color: #100806;
 }
