@@ -64,9 +64,6 @@ function updateRecipeDisplay(data) {
 
     for (let entry in data) {
         let tr = document.createElement("tr");
-        // for (let row = 0; row < craftingtiers; row++){
-        //     a
-        // }
 
         for (let column in rows[entry]) {
             if (rows[entry][column].childElementCount > 0) {
@@ -103,7 +100,7 @@ function updateRecipeDisplay(data) {
 
 
 function calcTierColour(totalTiers, thisTier) {
-    let colourrange = 255 * 3 / totalTiers;
+    // TODO: linear colour spectrum
     let tierdistrib = totalTiers / 3;
     let colours = new Array();
     colours["red"] = 0;
@@ -164,8 +161,10 @@ function calcTiers() {
 
 function selectRecipe(event) {
     //     console.log("click",event);
+    // TODO: allow the disabling of certain alternate recipes
     if (event.target.tagName == "LI") {
         clearDisplay();
+        // TODO: use worker for calculations
         window.requestIdleCallback(() => {
             let current = event.target.textContent;
             //         table.textContent=JSON.stringify(recipes[current]);
@@ -177,6 +176,7 @@ function selectRecipe(event) {
 }
 
 function addRecipeStage(data, quantity) {
+    // TODO: build a recipe chain rather than a parts list
     let versions = [];
 
     let recipeOptions = recipes[data];
@@ -231,3 +231,6 @@ function jsonAdd(to, from) {
     }
     return to;
 }
+
+// TODO: DM functions to seperate datastore from logic
+// i.e. getRecipe(string), 
