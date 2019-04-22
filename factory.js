@@ -1,5 +1,6 @@
 let recipes = {};
 const aside = document.getElementsByTagName("aside")[0];
+const outputQuantity = document.getElementById("quantity");
 const article = document.getElementsByTagName("article")[0];
 const table = document.getElementsByTagName("table")[0];
 let craftingtiers = 0;
@@ -21,12 +22,11 @@ fetch(`${location.protocol}//${location.host}/recipes.json`).then(
 
         calcTiers();
 
-        let colourrange = 255 * 3 / craftingtiers;
         for (let recipe in recipes) {
             let entry = document.createElement("li");
             entry.textContent = `${recipe}`;
             let colours = calcTierColour(craftingtiers, recipes[recipe]["craftingtier"]);
-            entry.style.background = `rgba(${colours["red"]},${colours["green"]},${colours["blue"]},0.5)`;
+            entry.style.backgroundColor = `rgba(${colours["red"]},${colours["green"]},${colours["blue"]},0.5)`;
             sidebar.appendChild(entry);
         }
         aside.addEventListener("click", selectRecipe)
@@ -40,37 +40,64 @@ function clearDisplay() {
 }
 
 function updateRecipeDisplay(data) {
-    clearDisplay();
-    let hr = document.createElement("tr");
-    let ct;
+
+    let rows = new Array(data.length);
+
+    for (let entry in data) {
+        // For each recipe possibility
+        // Setup data structure
+        rows[entry] = new Array(craftingtiers);
+        for (let column = 0; column < craftingtiers; column++) {
+            rows[entry][column] = document.createElement("ul");
+        }
+
+        // Populate
+        let recipe = data[entry];
+        for (let item in recipe) {
+            // For ingredients in the recipe
+            let li = document.createElement("li");
+            li.textContent = `${item} ${recipe[item]}`;
+            rows[entry][recipes[item]["craftingtier"]].appendChild(li);
+        }
+    }
+
+
     for (let entry in data) {
         let tr = document.createElement("tr");
+        // for (let row = 0; row < craftingtiers; row++){
+        //     a
+        // }
 
-        let row = data[entry];
-        let ul, td;
-        for (let item in row) {
-            if (ct != recipes[item]["craftingtier"]) {
-                if (ct == undefined) {
-                    for (let i = recipes[item]["craftingtier"]; i >= 0; i--) {
-                        let th = document.createElement("th");
-                        th.textContent = `Crafting Tier ${i}`;
-                        hr.appendChild(th);
-                    }
-                    table.appendChild(hr);
-                }
-                ct = recipes[item]["craftingtier"];
-                td = document.createElement("td");
-                ul = document.createElement("ul");
-                td.appendChild(ul);
+        for (let column in rows[entry]) {
+            if (rows[entry][column].childElementCount > 0) {
+                let td = document.createElement("td");
+                td.appendChild(rows[entry][column]);
+
+                let colours = calcTierColour(craftingtiers, column);
+                td.style.backgroundColor = `rgba(${colours["red"]},${colours["green"]},${colours["blue"]},0.7)`;
+
                 tr.appendChild(td);
             }
-            let li = document.createElement("li");
-            li.textContent = `${item} ${row[item]}`;
-            ul.appendChild(li);
         }
 
         table.appendChild(tr);
     }
+
+    let hr = document.createElement("tr");
+    for (let column = 0; column < craftingtiers; column++) {
+        if (rows.some((row) => {
+            if (row[column] && row[column].childElementCount > 0) {
+                return true;
+            }
+            return false;
+        })) {
+            let th = document.createElement("th");
+            th.textContent = `Crafting Tier ${column}`;
+            hr.appendChild(th);
+        }
+    }
+    table.insertBefore(hr, table.children[0]);
+
 
 }
 
@@ -137,13 +164,15 @@ function calcTiers() {
 
 function selectRecipe(event) {
     //     console.log("click",event);
-    window.a = event;
     if (event.target.tagName == "LI") {
-        let current = event.target.textContent;
-        //         table.textContent=JSON.stringify(recipes[current]);
-        let result = addRecipeStage(current, 1);
-        console.log(current, JSON.stringify(result));
-        updateRecipeDisplay(result);
+        clearDisplay();
+        window.requestIdleCallback(() => {
+            let current = event.target.textContent;
+            //         table.textContent=JSON.stringify(recipes[current]);
+            let result = addRecipeStage(current, outputQuantity.value);
+            console.log(current, JSON.stringify(result));
+            window.requestIdleCallback(() => { updateRecipeDisplay(result) });
+        });
     }
 }
 

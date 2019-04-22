@@ -63,7 +63,7 @@ article table td {
     color: white;
 }
 
-article table tr:nth-child(1) {
+article table tr:nth-child(1) th {
     background-color: white;
 }
 
