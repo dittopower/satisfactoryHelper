@@ -99,21 +99,21 @@ function updateRecipeDisplay(data) {
 
 
 function calcTierColour(totalTiers, thisTier) {
-    totalTiers=Number.parseInt(totalTiers);
-    thisTier=Number.parseInt(thisTier);
-    const modifier = (thisTier+1)/(totalTiers+1);
-    const total = 255*3*modifier;
-    const thirds = 256/3;
+    totalTiers = Number.parseInt(totalTiers);
+    thisTier = Number.parseInt(thisTier);
+    const modifier = (thisTier + 1) / (totalTiers + 1);
+    const total = 255 * 3 * modifier;
+    const thirds = 256 / 3;
     const colours = new Array();
-    if(total < 256){
+    if (total < 256) {
         colours["green"] = thirds * 3 * modifier;
         colours["blue"] = thirds * 2 * modifier;
         colours["red"] = thirds * 1 * modifier;
-    }else if (total < 512){
+    } else if (total < 512) {
         colours["green"] = thirds * 1 * modifier;
         colours["blue"] = thirds * 3 * modifier;
         colours["red"] = thirds * 2 * modifier;
-    }else{
+    } else {
         colours["green"] = thirds * 2 * modifier;
         colours["blue"] = thirds * 1 * modifier;
         colours["red"] = thirds * 3 * modifier;
@@ -131,19 +131,19 @@ function calcTiers() {
 
         for (let comp in getRecipe(recipe)) {
             let num = 0;
-            
-            for (let prop in getRecipeOption(recipe,comp)) {
+
+            for (let prop in getRecipeOption(recipe, comp)) {
                 if (isRecipe(prop)) {
                     num = Math.max(num, 1, getRecipeCraftingTier(prop) + 1);
-                    setRecipeOptionCraftingTier(recipe,prop,num);
+                    setRecipeOptionCraftingTier(recipe, prop, num);
                 }
             }
             if (getRecipeCraftingTier(recipe)) {
                 if (init != num) {
-                    setRecipeCraftingTier(recipe,Math.min(num, getRecipeCraftingTier(recipe)));
+                    setRecipeCraftingTier(recipe, Math.min(num, getRecipeCraftingTier(recipe)));
                 }
             } else {
-                setRecipeCraftingTier(recipe,num);
+                setRecipeCraftingTier(recipe, num);
             }
             setTotalCraftingTier(Math.max(num + 1, getTotalCraftingTier()));
         }
@@ -228,41 +228,41 @@ function jsonAdd(to, from) {
     return to;
 }
 
-function getRecipe(data){
+function getRecipe(data) {
     return recipes[data];
 }
-function getRecipeOption(data,option){
+function getRecipeOption(data, option) {
     return getRecipe(data)[option];
 }
-function isRecipe(data){
+function isRecipe(data) {
     return !!getRecipe(data);
 }
-function isRecipeOption(data,option){
-    return !!getRecipeOption(data,option);
+function isRecipeOption(data, option) {
+    return !!getRecipeOption(data, option);
 }
 
-function getTotalCraftingTier(){
+function getTotalCraftingTier() {
     return Number.parseInt(localStorage.getItem(`CraftingTier`)) || 0;
 }
-function setTotalCraftingTier(tier){
-    return localStorage.setItem(`CraftingTier`,tier);
+function setTotalCraftingTier(tier) {
+    return localStorage.setItem(`CraftingTier`, tier);
 }
-function getRecipeCraftingTier(data){
+function getRecipeCraftingTier(data) {
     return Number.parseInt(localStorage.getItem(`${data}.CraftingTier`));
 }
-function setRecipeCraftingTier(data,tier){
-    return localStorage.setItem(`${data}.CraftingTier`,tier);
+function setRecipeCraftingTier(data, tier) {
+    return localStorage.setItem(`${data}.CraftingTier`, tier);
 }
-function getRecipeOptionCraftingTier(data,option){
+function getRecipeOptionCraftingTier(data, option) {
     return Number.parseInt(localStorage.getItem(`${data}.${option}.CraftingTier`));
 }
-function setRecipeOptionCraftingTier(data,option,tier){
-    return localStorage.setItem(`${data}.${option}.CraftingTier`,tier);
+function setRecipeOptionCraftingTier(data, option, tier) {
+    return localStorage.setItem(`${data}.${option}.CraftingTier`, tier);
 }
 
 
 function exploreRecipe(data, quantity) {
-    console.warn("exploreRecipe",data)
+    console.warn("exploreRecipe", data)
     let versions = [];
 
     let recipeOptions = getRecipe(data);
@@ -270,7 +270,7 @@ function exploreRecipe(data, quantity) {
         if (!recipeOptions[opt] || recipeOptions[opt].constructor.name != "Object") {
             break;
         }
-        versions.push(exploreRecipeOption(data,quantity,opt))
+        versions.push(exploreRecipeOption(data, quantity, opt))
     }
     console.warn(`exploreRecipe: '${data}'`, JSON.stringify(versions));
     return versions;
@@ -278,25 +278,25 @@ function exploreRecipe(data, quantity) {
 
 function exploreRecipeOption(data, quantity, option) {
     console.warn(`exploreRecipeOption: '${data}' Opt: '${option}'`);
-    if (!isRecipe(data) || !isRecipeOption(data,option) || getRecipeOption(data,option).constructor.name != "Object") {
+    if (!isRecipe(data) || !isRecipeOption(data, option) || getRecipeOption(data, option).constructor.name != "Object") {
         throw new Error("Invalid Recipe Option");
     }
 
     let versions = [];
-    let recipe = getRecipeOption(data,option);
+    let recipe = getRecipeOption(data, option);
     // Determine the number of times this recipe needs to be executed.
     let multiple = Math.ceil(quantity / recipe["Makes"]);
     versions.push({
-            name: data,
-            quantity: recipe["Makes"]*multiple,
-            recipe: option
-        });
-    
+        name: data,
+        quantity: recipe["Makes"] * multiple,
+        recipe: option
+    });
+
 
     // Is this a harvest/gather or a craft?
-    if(recipe["Harvest"]){
+    if (recipe["Harvest"]) {
         console.log("harvest");
-    }else{
+    } else {
         console.log("craft");
         versions.push(new Array());
 
@@ -307,32 +307,32 @@ function exploreRecipeOption(data, quantity, option) {
                 versions[1] = new Array();
 
                 let ingredientRecipes = exploreRecipe(ingredient, recipe[ingredient] * multiple);
-                ingredientRecipes.forEach((res)=>{console.log("ingredientRecipes",JSON.stringify(res));});
+                ingredientRecipes.forEach((res) => { console.log("ingredientRecipes", JSON.stringify(res)); });
 
-                console.log("tempClone[1]",JSON.stringify(tempClone[1]));
+                console.log("tempClone[1]", JSON.stringify(tempClone[1]));
                 for (let ingredientOption = 0; ingredientOption < ingredientRecipes.length; ingredientOption++) {
-                    console.log("ingredientOption",ingredientOption);
-                    console.log("versions",JSON.stringify(versions));
+                    console.log("ingredientOption", ingredientOption);
+                    console.log("versions", JSON.stringify(versions));
 
                     // Additional Ingredients
-                    for (let i = 0; i < ingredientRecipes[ingredientOption].length; i++){
-                        if (ingredientRecipes[ingredientOption][i]){
-                            let ref = i+1;
+                    for (let i = 0; i < ingredientRecipes[ingredientOption].length; i++) {
+                        if (ingredientRecipes[ingredientOption][i]) {
+                            let ref = i + 1;
                             console.log("..joining", JSON.stringify(ingredientRecipes[ingredientOption][i]))
 
-                            if(i == 0){
-                                if((!tempClone[ref]) || tempClone[ref].length == 0){
-                                    versions[ref].push( [ingredientRecipes[ingredientOption][i]]);
-                                }else{
-                                    for( let existing in  tempClone[ref]){
-                                        versions[ref].push( (tempClone[ref][existing] ? tempClone[ref][existing] : []).concat([ingredientRecipes[ingredientOption][i]]));
+                            if (i == 0) {
+                                if ((!tempClone[ref]) || tempClone[ref].length == 0) {
+                                    versions[ref].push([ingredientRecipes[ingredientOption][i]]);
+                                } else {
+                                    for (let existing in tempClone[ref]) {
+                                        versions[ref].push((tempClone[ref][existing] ? tempClone[ref][existing] : []).concat([ingredientRecipes[ingredientOption][i]]));
                                     }
                                 }
 
-                            }else{
-                                if((!versions[ref]) || versions[ref].length == 0){
+                            } else {
+                                if ((!versions[ref]) || versions[ref].length == 0) {
                                     versions[ref] = [ingredientRecipes[ingredientOption][i]];
-                                }else{
+                                } else {
                                     versions[ref] = (versions[ref] ? versions[ref] : []).concat([ingredientRecipes[ingredientOption][i]]);
                                 }
                             }
@@ -344,7 +344,7 @@ function exploreRecipeOption(data, quantity, option) {
             }
         }
     }
-    
+
     console.warn(`exploreRecipeOption return: '${data}' Opt: '${option}'`, JSON.stringify(versions));
     return versions;
 }
