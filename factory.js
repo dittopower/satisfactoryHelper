@@ -6,7 +6,7 @@ const article = document.getElementsByTagName("article")[0];
 const table = document.getElementsByTagName("table")[0];
 let currentRecipe = undefined;
 let currentQuantity = 1;
-let currentTypeMode = "manual";
+let currentTypeMode = functionTypeSelector.value;
 const typeModeList = {
     "manual": "manual",
     "new": "v2",
@@ -55,9 +55,7 @@ function clearDisplay() {
 }
 
 function updateRecipeDisplay(data) {
-
     let rows = new Array(data.length);
-
     for (let entry in data) {
         // For each recipe possibility
         // Setup data structure
@@ -65,7 +63,6 @@ function updateRecipeDisplay(data) {
         for (let column = 0; column < getTotalCraftingTier(); column++) {
             rows[entry][column] = document.createElement("ul");
         }
-
         // Populate
         let recipe = data[entry];
         for (let item in recipe) {
@@ -75,26 +72,19 @@ function updateRecipeDisplay(data) {
             rows[entry][getRecipeCraftingTier(item)].appendChild(li);
         }
     }
-
-
     for (let entry in data) {
         let tr = document.createElement("tr");
-
         for (let column in rows[entry]) {
             if (rows[entry][column].childElementCount > 0) {
                 let td = document.createElement("td");
                 td.appendChild(rows[entry][column]);
-
                 let colours = calcTierColour(getTotalCraftingTier(), column);
                 td.style.backgroundColor = `rgba(${colours["red"]},${colours["green"]},${colours["blue"]},0.5)`;
-
                 tr.appendChild(td);
             }
         }
-
         table.appendChild(tr);
     }
-
     let hr = document.createElement("tr");
     for (let column = 0; column < getTotalCraftingTier(); column++) {
         if (rows.some((row) => {
@@ -109,8 +99,6 @@ function updateRecipeDisplay(data) {
         }
     }
     table.insertBefore(hr, table.children[0]);
-
-
 }
 
 
@@ -140,9 +128,10 @@ function calcTierColour(totalTiers, thisTier) {
 
 let allowedCalcs = 6;
 function calcTiers() {
+    logBegin();
     allowedCalcs--;
     let changed = 0;
-    for (recipe in recipes) {
+    for (let recipe in recipes) {
         let init = getRecipeCraftingTier(recipe);
 
         for (let comp in getRecipe(recipe)) {
@@ -151,7 +140,7 @@ function calcTiers() {
             for (let prop in getRecipeOption(recipe, comp)) {
                 if (isRecipe(prop)) {
                     num = Math.max(num, 1, getRecipeCraftingTier(prop) + 1);
-                    setRecipeOptionCraftingTier(recipe, prop, num);
+                    setRecipeOptionCraftingTier(recipe, comp, num);
                 }
             }
             if (getRecipeCraftingTier(recipe)) {
@@ -172,6 +161,7 @@ function calcTiers() {
     if (changed > 0 && allowedCalcs > 0) {
         calcTiers();
     }
+    logEnd();
 }
 
 function selectRecipe(event) {
@@ -197,16 +187,17 @@ function selectRecipe(event) {
             currentRecipe = inputText;
         }
     }
-    clearDisplay();
     if (currentRecipe && currentQuantity) {
         // TODO: use worker for calculations
         window.requestIdleCallback(() => {
             console.info(`Start Mode ${currentTypeMode} Making ${currentRecipe}`);
             switch (currentTypeMode) {
                 case typeModeList.new:
+                    v2resetDisplay();
                     buildRecipeView(currentRecipe, currentQuantity);
                     break;
                 default:
+                    clearDisplay();
                     let result = addRecipeStage(currentRecipe, currentQuantity);
                     console.info(`Mode ${currentTypeMode} Making ${currentRecipe} Result:`, JSON.stringify(result));
                     window.requestIdleCallback(() => {
@@ -275,17 +266,27 @@ function jsonAdd(to, from) {
     return to;
 }
 
+const stackRegEx = /at (?![a-z]+:\/\/)(\S+)/g
+// const stackRegEx = /at (\S+)/g
 function logBegin() {
-    console.warn(`[BEGIN]${(new Error()).stack.match(/at (?!http)(\S+)/g).pop().split(/ |\./).pop()}`, JSON.stringify(arguments));
+    let stack = (new Error()).stack.match(stackRegEx);
+    let func = stack[1] || stack.pop();
+    console.warn(`[BEGIN]${func.split(/ |\./).pop()}`, JSON.stringify(arguments));
 }
 function logEnd() {
-    console.warn(`[END]${(new Error()).stack.match(/at (?!http)(\S+)/g).pop().split(/ |\./).pop()}`, JSON.stringify(arguments));
+    let stack = (new Error()).stack.match(stackRegEx);
+    let func = stack[1] || stack.pop();
+    console.warn(`[END]${func.split(/ |\./).pop()}`, JSON.stringify(arguments));
 }
 function logBeginSub() {
-    console.warn(`    {START}${(new Error()).stack.match(/at (?!http)(\S+)/g).pop().split(/ |\./).pop()}`, JSON.stringify(arguments));
+    let stack = (new Error()).stack.match(stackRegEx);
+    let func = stack[1] || stack.pop();
+    console.debug(`    {START}${func.split(/ |\./).pop()}`, JSON.stringify(arguments));
 }
 function logEndSub() {
-    console.warn(`    {FINISH}${(new Error()).stack.match(/at (?!http)(\S+)/g).pop().split(/ |\./).pop()}`, JSON.stringify(arguments));
+    let stack = (new Error()).stack.match(stackRegEx);
+    let func = stack[1] || stack.pop();
+    console.debug(`    {FINISH}${func.split(/ |\./).pop()}`, JSON.stringify(arguments));
 }
 
 function getRecipe(data) {
@@ -409,11 +410,11 @@ function exploreRecipeOption(data, quantity, option) {
 }
 
 
-function buildRecipeView(data, quantity, depth = 1) {
+
+function buildRecipeView(data, quantity, depth = 0) {
     logBegin(arguments);
 
     let recipe = getRecipe(data);
-    depth++;
     for (let option in recipe) {
         logBeginSub("buildRecipeViewOption", data, option);
         let recipeOption = getRecipeOption(data, option);
@@ -427,7 +428,8 @@ function buildRecipeView(data, quantity, depth = 1) {
 
         // Determine the number of times this recipe needs to be executed.
         let multiple = Math.ceil(quantity / recipeOption["Makes"]);
-
+        v2addIngredient([data, option, multiple], depth);
+        
         // Is this a harvest/gather or a craft?
         if (recipeOption["Harvest"]) {
             console.debug("harvest");
@@ -436,12 +438,82 @@ function buildRecipeView(data, quantity, depth = 1) {
             // Get the ingredient stages
             for (let ingredient in recipeOption) {
                 if (isRecipe(ingredient)) {
-                    buildRecipeView(ingredient, multiple, depth);
+                    buildRecipeView(ingredient, multiple, depth + 1);
                 }
             }
         }
+        v2mark(depth);
         logEndSub("buildRecipeViewOption", data, option);
     }
     logEnd();
     return depth;
+}
+
+let trackingRows = [];
+let trackingColumns = [];
+let oddRow = true;
+
+function v2resetDisplay() {
+    for (let key in trackingColumns) {
+        trackingColumns[key].remove();
+    }
+    for (let key in trackingRows) {
+        trackingRows[key].remove();
+    }
+    trackingRows = [];
+    trackingColumns = [];
+    clearDisplay();
+}
+
+function v2mark(column) {
+    logBeginSub("v2mark");
+    trackingRows = [];
+    if (column == 0) {
+        oddRow = !oddRow;
+    }
+}
+
+function v2addIngredient(content, column) {
+    logBeginSub("v2addIngredient", arguments);
+    if (trackingRows.length < 1) {
+        let tr = document.createElement("tr");
+        trackingRows.push(tr);
+        table.appendChild(tr);
+        let num = Math.max(256 - 20 * trackingRows.length, 20);
+        tr.style.backgroundColor = `rgba(${num},${num},${num},${oddRow ? "0.2" : "0.3"})`;
+    }
+    for (const row in trackingRows) {
+        let tr = trackingRows[row];
+        if (tr.childElementCount == 0 && column > 0) {
+            for (let col in trackingColumns) {
+                if (col < column) {
+                    trackingColumns[col].rowSpan++
+                }
+            }
+        }
+
+        let td = v2FormatData(content[0], content[1], content[2]);
+        tr.appendChild(td);
+        trackingColumns[column] = td;
+    }
+}
+
+function v2FormatData(data, option, multiple) {
+    let td = document.createElement("td");
+    let ul = document.createElement("ul");
+
+    let li = document.createElement("li");
+    li.innerText = `${data} x ${getRecipeOption(data, option)["Makes"] * multiple}`;
+    ul.appendChild(li);
+
+    let li2 = document.createElement("li");
+    li2.innerText = `${data} recipe ${option}`;
+    ul.appendChild(li2);
+
+    let colours = calcTierColour(getTotalCraftingTier(), getRecipeOptionCraftingTier(data, option));
+    td.style.backgroundColor = `rgba(${colours["red"]},${colours["green"]},${colours["blue"]},0.4)`;
+
+    td.appendChild(ul);
+
+    return td;
 }

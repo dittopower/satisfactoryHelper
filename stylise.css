@@ -65,6 +65,10 @@ article table {
     color: white;
 }
 
+article table tr:nth-child(odd) {
+    /* background-color: rgba(255,255,255,0.2); */
+}
+
 article table td {
     color: white;
 }
