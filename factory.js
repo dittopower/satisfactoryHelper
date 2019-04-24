@@ -429,7 +429,7 @@ function buildRecipeView(data, quantity, depth = 0) {
         // Determine the number of times this recipe needs to be executed.
         let multiple = Math.ceil(quantity / recipeOption["Makes"]);
         v2addIngredient([data, option, multiple], depth);
-        
+
         // Is this a harvest/gather or a craft?
         if (recipeOption["Harvest"]) {
             console.debug("harvest");
@@ -503,12 +503,25 @@ function v2FormatData(data, option, multiple) {
     let ul = document.createElement("ul");
 
     let li = document.createElement("li");
-    li.innerText = `${data} x ${getRecipeOption(data, option)["Makes"] * multiple}`;
+    li.innerText = `${data}`;
     ul.appendChild(li);
 
-    let li2 = document.createElement("li");
-    li2.innerText = `${data} recipe ${option}`;
-    ul.appendChild(li2);
+    li = document.createElement("li");
+    li.innerText = `Quantity: ${getRecipeOption(data, option)["Makes"] * multiple}`;
+    ul.appendChild(li);
+    td.appendChild(ul);
+
+    ul = document.createElement("ul");
+    li = document.createElement("li");
+    li.innerText = `Recipe Variant: ${option}`;
+    ul.appendChild(li);
+
+    li = document.createElement("li");
+    li.innerText = `Makes: ${getRecipeOption(data, option)["Makes"]}`;
+    ul.appendChild(li);
+    li = document.createElement("li");
+    li.innerText = `Required Crafts: ${multiple}`;
+    ul.appendChild(li);
 
     let colours = calcTierColour(getTotalCraftingTier(), getRecipeOptionCraftingTier(data, option));
     td.style.backgroundColor = `rgba(${colours["red"]},${colours["green"]},${colours["blue"]},0.4)`;
