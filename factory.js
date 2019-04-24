@@ -3,6 +3,8 @@ const aside = document.getElementsByTagName("aside")[0];
 const outputQuantity = document.getElementById("quantity");
 const article = document.getElementsByTagName("article")[0];
 const table = document.getElementsByTagName("table")[0];
+let currentRecipe = undefined;
+let currentQuantity = 1;
 
 fetch(`${location.protocol}//${location.host}/recipes.json`).then(
     (resp) => {
@@ -28,7 +30,8 @@ fetch(`${location.protocol}//${location.host}/recipes.json`).then(
             entry.style.backgroundColor = `rgba(${colours["red"]},${colours["green"]},${colours["blue"]},0.5)`;
             sidebar.appendChild(entry);
         }
-        aside.addEventListener("click", selectRecipe)
+        sidebar.addEventListener("click", selectRecipe);
+        outputQuantity.addEventListener("change",selectRecipe);
     }
 );
 
@@ -160,15 +163,32 @@ function calcTiers() {
 
 function selectRecipe(event) {
     // TODO: allow the disabling of certain alternate recipes
-    if (event.target.tagName == "LI") {
+    let triggered = false;
+    if (/INPUT/.test(event.target.tagName)) {
+        triggered = true;
+        if(!isNaN(outputQuantity.value)){
+            currentQuantity = Number.parseInt(outputQuantity.value);
+        }
+    }
+    if (/LI/.test(event.target.tagName)) {
+        triggered = true;
+        let inputText = event.target.textContent;
+        if(isRecipe(inputText)){
+            currentRecipe = inputText;
+        }
+    }
+    if(triggered){
         clearDisplay();
-        // TODO: use worker for calculations
-        window.requestIdleCallback(() => {
-            let current = event.target.textContent;
-            let result = addRecipeStage(current, outputQuantity.value);
-            console.log(current, JSON.stringify(result));
-            window.requestIdleCallback(() => { updateRecipeDisplay(result) });
-        });
+        if(currentRecipe && currentQuantity){
+            // TODO: use worker for calculations
+            window.requestIdleCallback(() => {
+                let result = addRecipeStage(currentRecipe, currentQuantity);
+                console.info(currentRecipe, JSON.stringify(result));
+                window.requestIdleCallback(() => {
+                    updateRecipeDisplay(result);
+                });
+            });
+        }
     }
 }
 

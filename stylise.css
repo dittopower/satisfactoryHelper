@@ -21,6 +21,9 @@ aside {
     display: inline-block;
     padding-right: 10px;
     background: #fff;
+}
+aside ul{
+    height:100%;
     overflow-y: scroll;
 }
 
