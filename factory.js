@@ -29,6 +29,7 @@ fetch(`${location.protocol}//${location.host}/recipes.json`).then(
         aside.appendChild(sidebar);
 
         calcTiers();
+        // TODO: determine a colour scheme for each item
 
         for (let recipe in recipes) {
             let entry = document.createElement("li");
@@ -445,6 +446,7 @@ function buildRecipeView(data, quantity, depth = 0) {
         v2mark(depth);
         logEndSub("buildRecipeViewOption", data, option);
     }
+    // TODO: summary column?
     logEnd();
     return depth;
 }
