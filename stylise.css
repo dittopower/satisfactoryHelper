@@ -21,10 +21,11 @@ aside {
     display: inline-block;
     padding-right: 10px;
     background: #fff;
-    color:#100806;
+    color: #100806;
 }
-aside ul{
-    height:100%;
+
+aside ul {
+    height: 100%;
     overflow-y: scroll;
 }
 
@@ -70,7 +71,7 @@ article table td {
 
 article table tr th {
     background-color: white;
-    color:#100806;
+    color: #100806;
     height: 1em;
 }
 

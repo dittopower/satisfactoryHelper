@@ -9,7 +9,7 @@ let currentQuantity = 1;
 let currentTypeMode = "manual";
 const typeModeList = {
     "manual": "manual",
-    "new":"v2",
+    "new": "v2",
     "machine": "machine"
 }
 
@@ -175,8 +175,9 @@ function calcTiers() {
 }
 
 function selectRecipe(event) {
+    logBegin(event);
     // TODO: allow the disabling of certain alternate recipes
-    if(currentTypeMode == typeModeList.machine){
+    if (currentTypeMode == typeModeList.machine) {
         // TODO: use alternate recipe numbers for machine recipes flow (per minute)
         clearDisplay();
         let temp = document.createElement("h3");
@@ -201,8 +202,9 @@ function selectRecipe(event) {
         // TODO: use worker for calculations
         window.requestIdleCallback(() => {
             console.info(`Start Mode ${currentTypeMode} Making ${currentRecipe}`);
-            switch(currentTypeMode){
+            switch (currentTypeMode) {
                 case typeModeList.new:
+                    buildRecipeView(currentRecipe, currentQuantity);
                     break;
                 default:
                     let result = addRecipeStage(currentRecipe, currentQuantity);
@@ -214,7 +216,7 @@ function selectRecipe(event) {
             }
         });
     }
-
+    logEnd();
 }
 
 function addRecipeStage(data, quantity) {
@@ -273,6 +275,19 @@ function jsonAdd(to, from) {
     return to;
 }
 
+function logBegin() {
+    console.warn(`[BEGIN]${(new Error()).stack.match(/at (?!http)(\S+)/g).pop().split(/ |\./).pop()}`, JSON.stringify(arguments));
+}
+function logEnd() {
+    console.warn(`[END]${(new Error()).stack.match(/at (?!http)(\S+)/g).pop().split(/ |\./).pop()}`, JSON.stringify(arguments));
+}
+function logBeginSub() {
+    console.warn(`    {START}${(new Error()).stack.match(/at (?!http)(\S+)/g).pop().split(/ |\./).pop()}`, JSON.stringify(arguments));
+}
+function logEndSub() {
+    console.warn(`    {FINISH}${(new Error()).stack.match(/at (?!http)(\S+)/g).pop().split(/ |\./).pop()}`, JSON.stringify(arguments));
+}
+
 function getRecipe(data) {
     return recipes[data];
 }
@@ -285,7 +300,6 @@ function isRecipe(data) {
 function isRecipeOption(data, option) {
     return !!getRecipeOption(data, option);
 }
-
 function getTotalCraftingTier() {
     return Number.parseInt(localStorage.getItem(`CraftingTier`)) || 0;
 }
@@ -394,3 +408,40 @@ function exploreRecipeOption(data, quantity, option) {
     return versions;
 }
 
+
+function buildRecipeView(data, quantity, depth = 1) {
+    logBegin(arguments);
+
+    let recipe = getRecipe(data);
+    depth++;
+    for (let option in recipe) {
+        logBeginSub("buildRecipeViewOption", data, option);
+        let recipeOption = getRecipeOption(data, option);
+
+        if (!isRecipeOption(data, option) || recipeOption.constructor.name != "Object") {
+            break;
+        }
+        if (!isRecipe(data) || !isRecipeOption(data, option) || getRecipeOption(data, option).constructor.name != "Object") {
+            throw new Error("Invalid Recipe Option");
+        }
+
+        // Determine the number of times this recipe needs to be executed.
+        let multiple = Math.ceil(quantity / recipeOption["Makes"]);
+
+        // Is this a harvest/gather or a craft?
+        if (recipeOption["Harvest"]) {
+            console.debug("harvest");
+        } else {
+            console.debug("craft");
+            // Get the ingredient stages
+            for (let ingredient in recipeOption) {
+                if (isRecipe(ingredient)) {
+                    buildRecipeView(ingredient, multiple, depth);
+                }
+            }
+        }
+        logEndSub("buildRecipeViewOption", data, option);
+    }
+    logEnd();
+    return depth;
+}
