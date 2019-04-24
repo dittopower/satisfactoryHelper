@@ -70,7 +70,7 @@ function updateRecipeDisplay(data) {
                 td.appendChild(rows[entry][column]);
 
                 let colours = calcTierColour(getTotalCraftingTier(), column);
-                td.style.backgroundColor = `rgba(${colours["red"]},${colours["green"]},${colours["blue"]},0.7)`;
+                td.style.backgroundColor = `rgba(${colours["red"]},${colours["green"]},${colours["blue"]},0.5)`;
 
                 tr.appendChild(td);
             }
@@ -99,23 +99,26 @@ function updateRecipeDisplay(data) {
 
 
 function calcTierColour(totalTiers, thisTier) {
-    // TODO: linear colour spectrum
-    let tierdistrib = totalTiers / 3;
-    let colours = new Array();
-    colours["red"] = 0;
-    colours["green"] = 0;
-    colours["blue"] = 0;
-
-    if (thisTier < tierdistrib) {
-        colours["green"] = thisTier / totalTiers * 127.5;
-        colours["blue"] = thisTier / totalTiers * 127.5 + 127.5;
-    } else if (thisTier < (tierdistrib * 2)) {
-        colours["red"] = thisTier / totalTiers * 127.5;
-        colours["green"] = thisTier / totalTiers * 127.5 + 127.5;
-    } else {
-        colours["red"] = thisTier / totalTiers * 127.5 + 127.5;
-        colours["blue"] = thisTier / totalTiers * 127.5;
+    totalTiers=Number.parseInt(totalTiers);
+    thisTier=Number.parseInt(thisTier);
+    const modifier = (thisTier+1)/(totalTiers+1);
+    const total = 255*3*modifier;
+    const thirds = 256/3;
+    const colours = new Array();
+    if(total < 256){
+        colours["green"] = thirds * 3 * modifier;
+        colours["blue"] = thirds * 2 * modifier;
+        colours["red"] = thirds * 1 * modifier;
+    }else if (total < 512){
+        colours["green"] = thirds * 1 * modifier;
+        colours["blue"] = thirds * 3 * modifier;
+        colours["red"] = thirds * 2 * modifier;
+    }else{
+        colours["green"] = thirds * 2 * modifier;
+        colours["blue"] = thirds * 1 * modifier;
+        colours["red"] = thirds * 3 * modifier;
     }
+
     return colours;
 }
 
@@ -128,9 +131,7 @@ function calcTiers() {
 
         for (let comp in getRecipe(recipe)) {
             let num = 0;
-            // if (!isRecipe(comp)) {
-            //     break
-            // }
+            
             for (let prop in getRecipeOption(recipe,comp)) {
                 if (isRecipe(prop)) {
                     num = Math.max(num, 1, getRecipeCraftingTier(prop) + 1);

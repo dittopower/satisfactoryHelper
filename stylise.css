@@ -63,8 +63,9 @@ article table td {
     color: white;
 }
 
-article table tr:nth-child(1) th {
+article table tr th {
     background-color: white;
+    height: 1em;
 }
 
 footer {
