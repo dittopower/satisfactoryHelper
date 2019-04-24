@@ -1,10 +1,17 @@
 let recipes = {};
 const aside = document.getElementsByTagName("aside")[0];
 const outputQuantity = document.getElementById("quantity");
+const functionTypeSelector = document.getElementById("functionType");
 const article = document.getElementsByTagName("article")[0];
 const table = document.getElementsByTagName("table")[0];
 let currentRecipe = undefined;
 let currentQuantity = 1;
+let currentTypeMode = "manual";
+const typeModeList = {
+    "manual": "manual",
+    "new":"v2",
+    "machine": "machine"
+}
 
 fetch(`${location.protocol}//${location.host}/recipes.json`).then(
     (resp) => {
@@ -31,9 +38,15 @@ fetch(`${location.protocol}//${location.host}/recipes.json`).then(
             sidebar.appendChild(entry);
         }
         sidebar.addEventListener("click", selectRecipe);
-        outputQuantity.addEventListener("change",selectRecipe);
+        outputQuantity.addEventListener("change", selectRecipe);
+        functionTypeSelector.addEventListener("change", changeType);
     }
 );
+
+function changeType(event) {
+    currentTypeMode = event.target.value;
+    selectRecipe(event);
+}
 
 function clearDisplay() {
     [...table.children].forEach((child) => {
@@ -143,7 +156,7 @@ function calcTiers() {
             }
             if (getRecipeCraftingTier(recipe)) {
                 if (init != num) {
-                    setRecipeCraftingTier(recipe, Math.min(num, getRecipeCraftingTier(recipe)));
+                    setRecipeCraftingTier(recipe, Math.max(num, getRecipeCraftingTier(recipe)));
                 }
             } else {
                 setRecipeCraftingTier(recipe, num);
@@ -163,33 +176,45 @@ function calcTiers() {
 
 function selectRecipe(event) {
     // TODO: allow the disabling of certain alternate recipes
-    let triggered = false;
+    if(currentTypeMode == typeModeList.machine){
+        // TODO: use alternate recipe numbers for machine recipes flow (per minute)
+        clearDisplay();
+        let temp = document.createElement("h3");
+        temp.innerText = "N.Y.I.";
+        table.appendChild(temp);
+        return;
+    }
+
     if (/INPUT/.test(event.target.tagName)) {
-        triggered = true;
-        if(!isNaN(outputQuantity.value)){
+        if (!isNaN(outputQuantity.value)) {
             currentQuantity = Number.parseInt(outputQuantity.value);
         }
     }
     if (/LI/.test(event.target.tagName)) {
-        triggered = true;
         let inputText = event.target.textContent;
-        if(isRecipe(inputText)){
+        if (isRecipe(inputText)) {
             currentRecipe = inputText;
         }
     }
-    if(triggered){
-        clearDisplay();
-        if(currentRecipe && currentQuantity){
-            // TODO: use worker for calculations
-            window.requestIdleCallback(() => {
-                let result = addRecipeStage(currentRecipe, currentQuantity);
-                console.info(currentRecipe, JSON.stringify(result));
-                window.requestIdleCallback(() => {
-                    updateRecipeDisplay(result);
-                });
-            });
-        }
+    clearDisplay();
+    if (currentRecipe && currentQuantity) {
+        // TODO: use worker for calculations
+        window.requestIdleCallback(() => {
+            console.info(`Start Mode ${currentTypeMode} Making ${currentRecipe}`);
+            switch(currentTypeMode){
+                case typeModeList.new:
+                    break;
+                default:
+                    let result = addRecipeStage(currentRecipe, currentQuantity);
+                    console.info(`Mode ${currentTypeMode} Making ${currentRecipe} Result:`, JSON.stringify(result));
+                    window.requestIdleCallback(() => {
+                        updateRecipeDisplay(result);
+                    });
+                    break;
+            }
+        });
     }
+
 }
 
 function addRecipeStage(data, quantity) {

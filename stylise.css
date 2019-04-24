@@ -21,6 +21,7 @@ aside {
     display: inline-block;
     padding-right: 10px;
     background: #fff;
+    color:#100806;
 }
 aside ul{
     height:100%;
@@ -60,6 +61,7 @@ body {
 article table {
     width: 100%;
     height: 100%;
+    color: white;
 }
 
 article table td {
@@ -68,10 +70,15 @@ article table td {
 
 article table tr th {
     background-color: white;
+    color:#100806;
     height: 1em;
 }
 
 footer {
     background-color: #fff;
     text-align: right;
+}
+
+input#quantity {
+    max-width: 8ch;
 }
