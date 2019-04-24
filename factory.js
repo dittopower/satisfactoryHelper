@@ -3,7 +3,6 @@ const aside = document.getElementsByTagName("aside")[0];
 const outputQuantity = document.getElementById("quantity");
 const article = document.getElementsByTagName("article")[0];
 const table = document.getElementsByTagName("table")[0];
-let craftingtiers = 0;
 
 fetch(`${location.protocol}//${location.host}/recipes.json`).then(
     (resp) => {
@@ -25,7 +24,7 @@ fetch(`${location.protocol}//${location.host}/recipes.json`).then(
         for (let recipe in recipes) {
             let entry = document.createElement("li");
             entry.textContent = `${recipe}`;
-            let colours = calcTierColour(craftingtiers, getRecipe(recipe)["craftingtier"]);
+            let colours = calcTierColour(getTotalCraftingTier(), getRecipeCraftingTier(recipe));
             entry.style.backgroundColor = `rgba(${colours["red"]},${colours["green"]},${colours["blue"]},0.5)`;
             sidebar.appendChild(entry);
         }
@@ -46,8 +45,8 @@ function updateRecipeDisplay(data) {
     for (let entry in data) {
         // For each recipe possibility
         // Setup data structure
-        rows[entry] = new Array(craftingtiers);
-        for (let column = 0; column < craftingtiers; column++) {
+        rows[entry] = new Array(getTotalCraftingTier());
+        for (let column = 0; column < getTotalCraftingTier(); column++) {
             rows[entry][column] = document.createElement("ul");
         }
 
@@ -57,7 +56,7 @@ function updateRecipeDisplay(data) {
             // For ingredients in the recipe
             let li = document.createElement("li");
             li.textContent = `${item} ${recipe[item]}`;
-            rows[entry][getRecipe(item)["craftingtier"]].appendChild(li);
+            rows[entry][getRecipeCraftingTier(item)].appendChild(li);
         }
     }
 
@@ -70,7 +69,7 @@ function updateRecipeDisplay(data) {
                 let td = document.createElement("td");
                 td.appendChild(rows[entry][column]);
 
-                let colours = calcTierColour(craftingtiers, column);
+                let colours = calcTierColour(getTotalCraftingTier(), column);
                 td.style.backgroundColor = `rgba(${colours["red"]},${colours["green"]},${colours["blue"]},0.7)`;
 
                 tr.appendChild(td);
@@ -81,7 +80,7 @@ function updateRecipeDisplay(data) {
     }
 
     let hr = document.createElement("tr");
-    for (let column = 0; column < craftingtiers; column++) {
+    for (let column = 0; column < getTotalCraftingTier(); column++) {
         if (rows.some((row) => {
             if (row[column] && row[column].childElementCount > 0) {
                 return true;
@@ -125,29 +124,30 @@ function calcTiers() {
     allowedCalcs--;
     let changed = 0;
     for (recipe in recipes) {
-        let init = getRecipe(recipe)["craftingtier"];
+        let init = getRecipeCraftingTier(recipe);
 
         for (let comp in getRecipe(recipe)) {
             let num = 0;
-            if (comp == "craftingtier") {
-                break
-            }
+            // if (!isRecipe(comp)) {
+            //     break
+            // }
             for (let prop in getRecipeOption(recipe,comp)) {
-                if (recipes[prop]) {
-                    num = Math.max(num, 1, getRecipe(prop)["craftingtier"] + 1);
+                if (isRecipe(prop)) {
+                    num = Math.max(num, 1, getRecipeCraftingTier(prop) + 1);
+                    setRecipeOptionCraftingTier(recipe,prop,num);
                 }
             }
-            if (getRecipe(recipe)["craftingtier"]) {
+            if (getRecipeCraftingTier(recipe)) {
                 if (init != num) {
-                    getRecipe(recipe)["craftingtier"] = Math.min(num, getRecipe(recipe)["craftingtier"]);
+                    setRecipeCraftingTier(recipe,Math.min(num, getRecipeCraftingTier(recipe)));
                 }
             } else {
-                getRecipe(recipe)["craftingtier"] = num;
+                setRecipeCraftingTier(recipe,num);
             }
-            craftingtiers = Math.max(num + 1, craftingtiers);
+            setTotalCraftingTier(Math.max(num + 1, getTotalCraftingTier()));
         }
 
-        if (init != getRecipe(recipe)["craftingtier"]) {
+        if (init != getRecipeCraftingTier(recipe)) {
             changed++;
         }
     }
@@ -239,11 +239,24 @@ function isRecipe(data){
 function isRecipeOption(data,option){
     return !!getRecipeOption(data,option);
 }
+
+function getTotalCraftingTier(){
+    return Number.parseInt(localStorage.getItem(`CraftingTier`)) || 0;
+}
+function setTotalCraftingTier(tier){
+    return localStorage.setItem(`CraftingTier`,tier);
+}
 function getRecipeCraftingTier(data){
-    return localStorage.getItem(`${data}.CraftingTier`);
+    return Number.parseInt(localStorage.getItem(`${data}.CraftingTier`));
 }
 function setRecipeCraftingTier(data,tier){
     return localStorage.setItem(`${data}.CraftingTier`,tier);
+}
+function getRecipeOptionCraftingTier(data,option){
+    return Number.parseInt(localStorage.getItem(`${data}.${option}.CraftingTier`));
+}
+function setRecipeOptionCraftingTier(data,option,tier){
+    return localStorage.setItem(`${data}.${option}.CraftingTier`,tier);
 }
 
 
