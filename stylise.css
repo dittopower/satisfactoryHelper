@@ -41,11 +41,8 @@ article {
 
 header {
     text-align: center;
-    /* padding: 20px; */
+    padding: 20px;
     background-color: #fff;
-    display: inline-block;
-    width: 80%;
-    vertical-align: top;
 }
 
 header img {
@@ -90,4 +87,16 @@ footer {
 
 input#quantity {
     max-width: 8ch;
+}
+
+input.enabler {
+    width: 10ch;
+    height: 4ch;
+    background-color: #4CAF50;
+}
+
+input.disabler {
+    width: 10ch;
+    height: 4ch;
+    background-color: #f44336;
 }

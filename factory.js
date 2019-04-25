@@ -10,8 +10,12 @@ let currentTypeMode = functionTypeSelector.value;
 const typeModeList = {
     "manual": "manual",
     "new": "v2",
-    "machine": "machine"
-}
+    "machine": "machine",
+    "manager": "manager"
+};
+let trackingRows = [];
+let trackingColumns = [];
+let oddRow = true;
 
 fetch(`${location.protocol}//${location.host}/recipes.json`).then(
     (resp) => {
@@ -41,12 +45,26 @@ fetch(`${location.protocol}//${location.host}/recipes.json`).then(
         sidebar.addEventListener("click", selectRecipe);
         outputQuantity.addEventListener("change", selectRecipe);
         functionTypeSelector.addEventListener("change", changeType);
+        changeType(functionTypeSelector.value);
     }
 );
 
 function changeType(event) {
-    currentTypeMode = event.target.value;
-    selectRecipe(event);
+    logBegin("changeType", arguments);
+    if (typeof event == "object") {
+        currentTypeMode = event.target.value;
+    } else {
+        currentTypeMode = event;
+    }
+    switch (currentTypeMode) {
+        case typeModeList.manager:
+            displayRecipeManager();
+            break;
+        default:
+            selectRecipe(event);
+            break;
+    }
+    logEnd("changeType");
 }
 
 function clearDisplay() {
@@ -320,7 +338,12 @@ function getRecipeOptionCraftingTier(data, option) {
 function setRecipeOptionCraftingTier(data, option, tier) {
     return localStorage.setItem(`${data}.${option}.CraftingTier`, tier);
 }
-
+function getRecipeOptionEnabled(recipe, option) {
+    return false.toString() != localStorage.getItem(`${recipe}.${option}.Enabled`);
+}
+function setRecipeOptionEnabled(recipe, option, status) {
+    return localStorage.setItem(`${recipe}.${option}.Enabled`, status.toString());
+}
 
 function exploreRecipe(data, quantity) {
     console.warn("exploreRecipe", data)
@@ -410,8 +433,6 @@ function exploreRecipeOption(data, quantity, option) {
     return versions;
 }
 
-
-
 function buildRecipeView(data, quantity, depth = 0) {
     logBegin(arguments);
 
@@ -450,10 +471,6 @@ function buildRecipeView(data, quantity, depth = 0) {
     logEnd();
     return depth;
 }
-
-let trackingRows = [];
-let trackingColumns = [];
-let oddRow = true;
 
 function v2resetDisplay() {
     for (let key in trackingColumns) {
@@ -531,4 +548,115 @@ function v2FormatData(data, option, multiple) {
     td.appendChild(ul);
 
     return td;
+}
+
+function displayRecipeManager() {
+    logBegin("displayRecipeManager");
+    v2resetDisplay();
+    for (let entry in recipes) {
+        const recipe = getRecipe(entry);
+        addItemToManager(0, entry);
+        for (let variant in recipe) {
+            addItemToManager(1, entry, variant);
+            v2mark(1);
+        }
+        v2mark(0);
+    }
+    logEnd("displayRecipeManager");
+}
+
+function addItemToManager(column, recipe, option) {
+    logBegin("addItemToManager", arguments);
+    if (trackingRows.length < 1) {
+        let tr = document.createElement("tr");
+        trackingRows.push(tr);
+        table.appendChild(tr);
+        let num = Math.max(256 - 40 * trackingRows.length, 20);
+        tr.style.backgroundColor = `rgba(${num},${num},255,${oddRow ? "0.2" : "0.3"})`;
+    }
+    for (const row in trackingRows) {
+        let tr = trackingRows[row];
+        if (tr.childElementCount == 0 && column > 0) {
+            for (let col in trackingColumns) {
+                if (col < column) {
+                    trackingColumns[col].rowSpan++
+                }
+            }
+        }
+
+        let td = document.createElement("td");
+        const data = getRecipe(recipe);
+        if (option) {
+            const opt = getRecipeOption(recipe, option);
+            const enabled = getRecipeOptionEnabled(recipe, option);
+            const ul = document.createElement("ul");
+
+            let li = document.createElement("li");
+            li.innerText = `Variant: ${option}`;
+            ul.appendChild(li);
+            li = document.createElement("li");
+            li.innerText = `Enabled: ${enabled}`;
+            ul.appendChild(li);
+
+            for (let ingredient in opt) {
+                if (isRecipe(ingredient)) {
+                    li = document.createElement("li");
+                    li.innerText = `${ingredient} x ${opt[ingredient]}`;
+                    ul.appendChild(li);
+                } else {
+                    li = document.createElement("li");
+                    if (/number|string/.test(typeof opt[ingredient])) {
+                        li.innerText = `${ingredient}: ${opt[ingredient]}`;
+                    } else {
+                        li.innerText = `${ingredient}`;
+                    }
+                    ul.appendChild(li);
+                }
+            }
+
+            let toggleEnabled = document.createElement("INPUT");
+            toggleEnabled.type = "button";
+            toggleEnabled.data = [recipe, option];
+            toggleEnabled.value = !enabled ? "Enable" : "Disable";
+            toggleEnabled.classList.add(!enabled ? "enabler" : "disabler");
+            toggleEnabled.addEventListener("click", updateRecipeOptionEnabledStatus);
+            td.appendChild(toggleEnabled);
+
+            td.appendChild(ul);
+
+            let colours = calcTierColour(data.length, option);
+            td.style.backgroundColor = `rgba(${colours["red"]},${colours["green"]},${colours["blue"]},0.2)`;
+
+        } else {
+            const ul = document.createElement("ul");
+
+            let li = document.createElement("li");
+            li.innerText = `${recipe}`;
+            ul.appendChild(li);
+
+            td.appendChild(ul);
+        }
+
+        tr.appendChild(td);
+        trackingColumns[column] = td;
+    }
+    logEnd("addItemToManager");
+}
+
+function updateRecipeOptionEnabledStatus(event) {
+    logBegin("updateRecipeOptionEnabledStatus", arguments);
+    let recipe = event.target.data[0];
+    let option = event.target.data[1];
+    if (/enable/i.test(event.target.value)) {
+        setRecipeOptionEnabled(recipe, option, true);
+    } else {
+        // TODO: Maybe prevent disabling all recipes?
+        setRecipeOptionEnabled(recipe, option, false);
+    }
+    let toggleEnabled = event.target;
+    let enabled = getRecipeOptionEnabled(recipe, option);
+    toggleEnabled.value = !enabled ? "Enable" : "Disable";
+    toggleEnabled.classList.add(!enabled ? "enabler" : "disabler");
+    toggleEnabled.classList.remove(enabled ? "enabler" : "disabler");
+    logEnd("updateRecipeOptionEnabledStatus");
 }
