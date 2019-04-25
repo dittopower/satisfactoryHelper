@@ -402,7 +402,7 @@ function buildRecipeView(data, quantity, depth = 0) {
             // Get the ingredient stages
             for (let ingredient in recipeOption) {
                 if (isRecipe(ingredient)) {
-                    buildRecipeView(ingredient, multiple, depth + 1);
+                    buildRecipeView(ingredient, multiple * recipeOption[ingredient], depth + 1);
                 }
             }
         }
@@ -462,8 +462,8 @@ function v2addIngredient(content, column) {
 
 function v2FormatData(data, option, multiple) {
     let td = document.createElement("td");
-    
-    td.appendChild(toggleEnableButton(data,option,disableAndRefresh));
+
+    td.appendChild(toggleEnableButton(data, option, disableAndRefresh));
 
     let ul = document.createElement("ul");
 
@@ -501,13 +501,13 @@ function v2FormatData(data, option, multiple) {
     return td;
 }
 
-function disableAndRefresh(event){
+function disableAndRefresh(event) {
     updateRecipeOptionEnabledStatus(event);
     selectRecipe(event);
 }
 
-function toggleEnableButton (recipe, option, callback = updateRecipeOptionEnabledStatus){
-    
+function toggleEnableButton(recipe, option, callback = updateRecipeOptionEnabledStatus) {
+
     const enabled = getRecipeOptionEnabled(recipe, option);
     let toggleEnabled = document.createElement("INPUT");
     toggleEnabled.type = "button";
@@ -582,7 +582,7 @@ function addItemToManager(column, recipe, option) {
                 }
             }
 
-            td.appendChild(toggleEnableButton(recipe,option));
+            td.appendChild(toggleEnableButton(recipe, option));
             td.appendChild(ul);
 
             let colours = calcTierColour(data.length, option);
