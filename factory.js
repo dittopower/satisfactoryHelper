@@ -56,6 +56,7 @@ function changeType(event) {
     } else {
         currentTypeMode = event;
     }
+    v2resetDisplay();
     switch (currentTypeMode) {
         case typeModeList.manager:
             displayRecipeManager();
@@ -439,32 +440,32 @@ function buildRecipeView(data, quantity, depth = 0) {
     let recipe = getRecipe(data);
     for (let option in recipe) {
         logBeginSub("buildRecipeViewOption", data, option);
-        let recipeOption = getRecipeOption(data, option);
-
-        if (!isRecipeOption(data, option) || recipeOption.constructor.name != "Object") {
-            break;
-        }
+        
         if (!isRecipe(data) || !isRecipeOption(data, option) || getRecipeOption(data, option).constructor.name != "Object") {
             throw new Error("Invalid Recipe Option");
         }
+        let recipeOption = getRecipeOption(data, option);
 
         // Determine the number of times this recipe needs to be executed.
         let multiple = Math.ceil(quantity / recipeOption["Makes"]);
         v2addIngredient([data, option, multiple], depth);
+            if (getRecipeOptionEnabled(data,option)) {
 
-        // Is this a harvest/gather or a craft?
-        if (recipeOption["Harvest"]) {
-            console.debug("harvest");
-        } else {
-            console.debug("craft");
-            // Get the ingredient stages
-            for (let ingredient in recipeOption) {
-                if (isRecipe(ingredient)) {
-                    buildRecipeView(ingredient, multiple, depth + 1);
+            // Is this a harvest/gather or a craft?
+            if (recipeOption["Harvest"]) {
+                console.debug("harvest");
+            } else {
+                console.debug("craft");
+                // Get the ingredient stages
+                for (let ingredient in recipeOption) {
+                    if (isRecipe(ingredient)) {
+                        buildRecipeView(ingredient, multiple, depth + 1);
+                    }
                 }
             }
         }
         v2mark(depth);
+        
         logEndSub("buildRecipeViewOption", data, option);
     }
     // TODO: summary column?
@@ -543,7 +544,12 @@ function v2FormatData(data, option, multiple) {
     ul.appendChild(li);
 
     let colours = calcTierColour(getTotalCraftingTier(), getRecipeOptionCraftingTier(data, option));
-    td.style.backgroundColor = `rgba(${colours["red"]},${colours["green"]},${colours["blue"]},0.4)`;
+    if (!getRecipeOptionEnabled(data,option)) {
+        td.style.textDecoration = "line-through wavy black";
+        td.style.backgroundColor = `rgba(${colours["red"]},${colours["green"]},${colours["blue"]},0.1)`;
+    }else{
+        td.style.backgroundColor = `rgba(${colours["red"]},${colours["green"]},${colours["blue"]},0.4)`;
+    }
 
     td.appendChild(ul);
 

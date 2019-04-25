@@ -36,7 +36,6 @@ article {
     height: calc(100% - 130px);
     overflow: auto;
     background-color: #100806;
-    /* vertical-align: top; */
 }
 
 header {
