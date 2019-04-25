@@ -8,7 +8,6 @@ let currentRecipe = undefined;
 let currentQuantity = 1;
 let currentTypeMode = functionTypeSelector.value;
 const typeModeList = {
-    "manual": "manual",
     "new": "v2",
     "machine": "machine",
     "manager": "manager"
@@ -73,54 +72,6 @@ function clearDisplay() {
         child.remove();
     })
 }
-
-function updateRecipeDisplay(data) {
-    let rows = new Array(data.length);
-    for (let entry in data) {
-        // For each recipe possibility
-        // Setup data structure
-        rows[entry] = new Array(getTotalCraftingTier());
-        for (let column = 0; column < getTotalCraftingTier(); column++) {
-            rows[entry][column] = document.createElement("ul");
-        }
-        // Populate
-        let recipe = data[entry];
-        for (let item in recipe) {
-            // For ingredients in the recipe
-            let li = document.createElement("li");
-            li.textContent = `${item} ${recipe[item]}`;
-            rows[entry][getRecipeCraftingTier(item)].appendChild(li);
-        }
-    }
-    for (let entry in data) {
-        let tr = document.createElement("tr");
-        for (let column in rows[entry]) {
-            if (rows[entry][column].childElementCount > 0) {
-                let td = document.createElement("td");
-                td.appendChild(rows[entry][column]);
-                let colours = calcTierColour(getTotalCraftingTier(), column);
-                td.style.backgroundColor = `rgba(${colours["red"]},${colours["green"]},${colours["blue"]},0.5)`;
-                tr.appendChild(td);
-            }
-        }
-        table.appendChild(tr);
-    }
-    let hr = document.createElement("tr");
-    for (let column = 0; column < getTotalCraftingTier(); column++) {
-        if (rows.some((row) => {
-            if (row[column] && row[column].childElementCount > 0) {
-                return true;
-            }
-            return false;
-        })) {
-            let th = document.createElement("th");
-            th.textContent = `Crafting Tier ${column}`;
-            hr.appendChild(th);
-        }
-    }
-    table.insertBefore(hr, table.children[0]);
-}
-
 
 function calcTierColour(totalTiers, thisTier) {
     totalTiers = Number.parseInt(totalTiers);
@@ -212,59 +163,14 @@ function selectRecipe(event) {
         window.requestIdleCallback(() => {
             console.info(`Start Mode ${currentTypeMode} Making ${currentRecipe}`);
             switch (currentTypeMode) {
-                case typeModeList.new:
+                default:
                     v2resetDisplay();
                     buildRecipeView(currentRecipe, currentQuantity);
-                    break;
-                default:
-                    clearDisplay();
-                    let result = addRecipeStage(currentRecipe, currentQuantity);
-                    console.info(`Mode ${currentTypeMode} Making ${currentRecipe} Result:`, JSON.stringify(result));
-                    window.requestIdleCallback(() => {
-                        updateRecipeDisplay(result);
-                    });
                     break;
             }
         });
     }
     logEnd();
-}
-
-function addRecipeStage(data, quantity) {
-    let versions = [];
-
-    let recipeOptions = getRecipe(data);
-    for (let opt in recipeOptions) {
-        if (!recipeOptions[opt] || recipeOptions[opt].constructor.name != "Object") {
-            break;
-        }
-        let recipe = recipeOptions[opt];
-        // For each version of the recipe
-        const init = {};
-        init[data] = quantity;
-        let variations = [init];
-
-        //         determine the number of times this recipe needs to be executed.
-        let multiple = Math.ceil(quantity / recipe["Makes"]);
-
-        //         Get the component stages
-        for (let component in recipe) {
-            let localvariations = [];
-            if (getRecipe(component)) {
-                let subcomponents = addRecipeStage(component, recipe[component] * multiple);
-                for (let thing in subcomponents) {
-                    for (let item in variations) {
-                        localvariations.push(jsonAdd({ ...variations[item] }, subcomponents[thing]));
-                    }
-                }
-                variations = localvariations;
-            }
-        }
-        versions = versions.concat(variations);
-
-
-    }
-    return versions;
 }
 
 function jsonAddProperty(property, to, from) {
@@ -440,7 +346,7 @@ function buildRecipeView(data, quantity, depth = 0) {
     let recipe = getRecipe(data);
     for (let option in recipe) {
         logBeginSub("buildRecipeViewOption", data, option);
-        
+
         if (!isRecipe(data) || !isRecipeOption(data, option) || getRecipeOption(data, option).constructor.name != "Object") {
             throw new Error("Invalid Recipe Option");
         }
@@ -449,7 +355,7 @@ function buildRecipeView(data, quantity, depth = 0) {
         // Determine the number of times this recipe needs to be executed.
         let multiple = Math.ceil(quantity / recipeOption["Makes"]);
         v2addIngredient([data, option, multiple], depth);
-            if (getRecipeOptionEnabled(data,option)) {
+        if (getRecipeOptionEnabled(data, option)) {
 
             // Is this a harvest/gather or a craft?
             if (recipeOption["Harvest"]) {
@@ -465,7 +371,7 @@ function buildRecipeView(data, quantity, depth = 0) {
             }
         }
         v2mark(depth);
-        
+
         logEndSub("buildRecipeViewOption", data, option);
     }
     // TODO: summary column?
@@ -544,10 +450,10 @@ function v2FormatData(data, option, multiple) {
     ul.appendChild(li);
 
     let colours = calcTierColour(getTotalCraftingTier(), getRecipeOptionCraftingTier(data, option));
-    if (!getRecipeOptionEnabled(data,option)) {
+    if (!getRecipeOptionEnabled(data, option)) {
         td.style.textDecoration = "line-through wavy black";
         td.style.backgroundColor = `rgba(${colours["red"]},${colours["green"]},${colours["blue"]},0.1)`;
-    }else{
+    } else {
         td.style.backgroundColor = `rgba(${colours["red"]},${colours["green"]},${colours["blue"]},0.4)`;
     }
 
