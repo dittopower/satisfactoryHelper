@@ -252,8 +252,8 @@ function logEndSub() {
     console.debug(`    {FINISH}${func.split(/ |\./).pop()}`, JSON.stringify(arguments));
 }
 
-function getRecipes(){
-    if(currentRecipeMode == recipeModeList.machine){
+function getRecipes() {
+    if (currentRecipeMode == recipeModeList.machine) {
         return machineRecipes;
     }
     return recipes;
@@ -404,13 +404,13 @@ function buildRecipeView(data, quantity, depth = 0) {
             // if (recipeOption["Harvest"]) {
             //     console.debug("harvest");
             // } else {
-                console.debug("craft");
-                // Get the ingredient stages
-                for (let ingredient in recipeOption) {
-                    if (isRecipe(ingredient)) {
-                        buildRecipeView(ingredient, multiple, depth + 1);
-                    }
+            console.debug("craft");
+            // Get the ingredient stages
+            for (let ingredient in recipeOption) {
+                if (isRecipe(ingredient)) {
+                    buildRecipeView(ingredient, multiple, depth + 1);
                 }
+            }
             // }
         }
         v2mark(depth);
