@@ -328,7 +328,7 @@ function exploreRecipeOption(data, quantity, option) {
 
 
     // Is this a harvest/gather or a craft?
-    if (recipe["Harvest"]) {
+    if (recipe["Harvest"]) {//If this gets used update this
         console.log("harvest");
     } else {
         console.log("craft");
@@ -399,19 +399,12 @@ function buildRecipeView(data, quantity, depth = 0) {
         let multiple = Math.ceil(quantity / recipeOption["Makes"]);
         v2addIngredient([data, option, multiple], depth);
         if (getRecipeOptionEnabled(data, option)) {
-
-            // Is this a harvest/gather or a craft?
-            // if (recipeOption["Harvest"]) {
-            //     console.debug("harvest");
-            // } else {
-            console.debug("craft");
             // Get the ingredient stages
             for (let ingredient in recipeOption) {
                 if (isRecipe(ingredient)) {
                     buildRecipeView(ingredient, multiple, depth + 1);
                 }
             }
-            // }
         }
         v2mark(depth);
 
