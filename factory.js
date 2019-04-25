@@ -462,6 +462,9 @@ function v2addIngredient(content, column) {
 
 function v2FormatData(data, option, multiple) {
     let td = document.createElement("td");
+    
+    td.appendChild(toggleEnableButton(data,option,disableAndRefresh));
+
     let ul = document.createElement("ul");
 
     let li = document.createElement("li");
@@ -496,6 +499,23 @@ function v2FormatData(data, option, multiple) {
     td.appendChild(ul);
 
     return td;
+}
+
+function disableAndRefresh(event){
+    updateRecipeOptionEnabledStatus(event);
+    selectRecipe(event);
+}
+
+function toggleEnableButton (recipe, option, callback = updateRecipeOptionEnabledStatus){
+    
+    const enabled = getRecipeOptionEnabled(recipe, option);
+    let toggleEnabled = document.createElement("INPUT");
+    toggleEnabled.type = "button";
+    toggleEnabled.data = [recipe, option];
+    toggleEnabled.value = !enabled ? "Enable" : "Disable";
+    toggleEnabled.classList.add(!enabled ? "enabler" : "disabler");
+    toggleEnabled.addEventListener("click", callback);
+    return toggleEnabled;
 }
 
 function displayRecipeManager() {
@@ -562,14 +582,7 @@ function addItemToManager(column, recipe, option) {
                 }
             }
 
-            let toggleEnabled = document.createElement("INPUT");
-            toggleEnabled.type = "button";
-            toggleEnabled.data = [recipe, option];
-            toggleEnabled.value = !enabled ? "Enable" : "Disable";
-            toggleEnabled.classList.add(!enabled ? "enabler" : "disabler");
-            toggleEnabled.addEventListener("click", updateRecipeOptionEnabledStatus);
-            td.appendChild(toggleEnabled);
-
+            td.appendChild(toggleEnableButton(recipe,option));
             td.appendChild(ul);
 
             let colours = calcTierColour(data.length, option);
