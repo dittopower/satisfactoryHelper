@@ -1,5 +1,6 @@
 # Deamon's Satisfactory Helper
-A w.i.p. tool to help me map the available crafting recipe and automation for Satisfactory. 
+A w.i.p. tool to help me map the available crafting recipe and automation for Satisfactory.
+ - https://satisfactoryhelper.deamon.info
 
 ## Satisfactory
  - https://satisfactorygame.com
