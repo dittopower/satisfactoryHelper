@@ -1,0 +1,1019 @@
+{
+    "Harvest": [
+        {
+            "Makes": 1
+        }
+    ],
+    "Portable Miner - Impure": [
+        {
+            "Makes": 20
+        }
+    ],
+    "Portable Miner - Normal": [
+        {
+            "Makes": 40
+        }
+    ],
+    "Portable Miner - Pure": [
+        {
+            "Makes": 80
+        }
+    ],
+    "Miner MK1 - Impure": [
+        {
+            "Makes": 30
+        }
+    ],
+    "Miner MK1 - Normal": [
+        {
+            "Makes": 60
+        }
+    ],
+    "Miner MK1 - Pure": [
+        {
+            "Makes": 120
+        }
+    ],
+    "Miner MK2 - Impure": [
+        {
+            "Makes": 60
+        }
+    ],
+    "Miner MK2 - Normal": [
+        {
+            "Makes": 120
+        }
+    ],
+    "Miner MK2 - Pure": [
+        {
+            "Makes": 240
+        }
+    ],
+    "Miner MK3 - Impure": [
+        {
+            "Makes": 120
+        }
+    ],
+    "Miner MK3 - Normal": [
+        {
+            "Makes": 240
+        }
+    ],
+    "Miner MK3 - Pure": [
+        {
+            "Makes": 480
+        }
+    ],
+    "Iron Ore": [
+        {
+            "Harvest": 1,
+            "Makes": 1
+        },
+        {
+            "Portable Miner - Impure": 1,
+            "Makes": 1
+        },
+        {
+            "Portable Miner - Normal": 1,
+            "Makes": 1
+        },
+        {
+            "Portable Miner - Pure": 1,
+            "Makes": 1
+        },
+        {
+            "Miner MK1 - Impure": 1,
+            "Makes": 1
+        },
+        {
+            "Miner MK1 - Normal": 1,
+            "Makes": 1
+        },
+        {
+            "Miner MK1 - Pure": 1,
+            "Makes": 1
+        },
+        {
+            "Miner MK2 - Impure": 1,
+            "Makes": 1
+        },
+        {
+            "Miner MK2 - Normal": 1,
+            "Makes": 1
+        },
+        {
+            "Miner MK2 - Pure": 1,
+            "Makes": 1
+        },
+        {
+            "Miner MK3 - Impure": 1,
+            "Makes": 1
+        },
+        {
+            "Miner MK3 - Normal": 1,
+            "Makes": 1
+        },
+        {
+            "Miner MK3 - Pure": 1,
+            "Makes": 1
+        }
+    ],
+    "Copper Ore": [
+        {
+            "Harvest": 1,
+            "Makes": 1
+        },
+        {
+            "Portable Miner - Impure": 1,
+            "Makes": 1
+        },
+        {
+            "Portable Miner - Normal": 1,
+            "Makes": 1
+        },
+        {
+            "Portable Miner - Pure": 1,
+            "Makes": 1
+        },
+        {
+            "Miner MK1 - Impure": 1,
+            "Makes": 1
+        },
+        {
+            "Miner MK1 - Normal": 1,
+            "Makes": 1
+        },
+        {
+            "Miner MK1 - Pure": 1,
+            "Makes": 1
+        },
+        {
+            "Miner MK2 - Impure": 1,
+            "Makes": 1
+        },
+        {
+            "Miner MK2 - Normal": 1,
+            "Makes": 1
+        },
+        {
+            "Miner MK2 - Pure": 1,
+            "Makes": 1
+        },
+        {
+            "Miner MK3 - Impure": 1,
+            "Makes": 1
+        },
+        {
+            "Miner MK3 - Normal": 1,
+            "Makes": 1
+        },
+        {
+            "Miner MK3 - Pure": 1,
+            "Makes": 1
+        }
+    ],
+    "Coal": [
+        {
+            "Harvest": 1,
+            "Makes": 1
+        },
+        {
+            "Portable Miner - Impure": 1,
+            "Makes": 1
+        },
+        {
+            "Portable Miner - Normal": 1,
+            "Makes": 1
+        },
+        {
+            "Portable Miner - Pure": 1,
+            "Makes": 1
+        },
+        {
+            "Miner MK1 - Impure": 1,
+            "Makes": 1
+        },
+        {
+            "Miner MK1 - Normal": 1,
+            "Makes": 1
+        },
+        {
+            "Miner MK1 - Pure": 1,
+            "Makes": 1
+        },
+        {
+            "Miner MK2 - Impure": 1,
+            "Makes": 1
+        },
+        {
+            "Miner MK2 - Normal": 1,
+            "Makes": 1
+        },
+        {
+            "Miner MK2 - Pure": 1,
+            "Makes": 1
+        },
+        {
+            "Miner MK3 - Impure": 1,
+            "Makes": 1
+        },
+        {
+            "Miner MK3 - Normal": 1,
+            "Makes": 1
+        },
+        {
+            "Miner MK3 - Pure": 1,
+            "Makes": 1
+        }
+    ],
+    "Caterium Ore": [
+        {
+            "Harvest": 1,
+            "Makes": 1
+        },
+        {
+            "Portable Miner - Impure": 1,
+            "Makes": 1
+        },
+        {
+            "Portable Miner - Normal": 1,
+            "Makes": 1
+        },
+        {
+            "Portable Miner - Pure": 1,
+            "Makes": 1
+        },
+        {
+            "Miner MK1 - Impure": 1,
+            "Makes": 1
+        },
+        {
+            "Miner MK1 - Normal": 1,
+            "Makes": 1
+        },
+        {
+            "Miner MK1 - Pure": 1,
+            "Makes": 1
+        },
+        {
+            "Miner MK2 - Impure": 1,
+            "Makes": 1
+        },
+        {
+            "Miner MK2 - Normal": 1,
+            "Makes": 1
+        },
+        {
+            "Miner MK2 - Pure": 1,
+            "Makes": 1
+        },
+        {
+            "Miner MK3 - Impure": 1,
+            "Makes": 1
+        },
+        {
+            "Miner MK3 - Normal": 1,
+            "Makes": 1
+        },
+        {
+            "Miner MK3 - Pure": 1,
+            "Makes": 1
+        }
+    ],
+    "S.A.M. Ore": [
+        {
+            "Harvest": 1,
+            "Makes": 1
+        },
+        {
+            "Portable Miner - Impure": 1,
+            "Makes": 1
+        },
+        {
+            "Portable Miner - Normal": 1,
+            "Makes": 1
+        },
+        {
+            "Portable Miner - Pure": 1,
+            "Makes": 1
+        },
+        {
+            "Miner MK1 - Impure": 1,
+            "Makes": 1
+        },
+        {
+            "Miner MK1 - Normal": 1,
+            "Makes": 1
+        },
+        {
+            "Miner MK1 - Pure": 1,
+            "Makes": 1
+        },
+        {
+            "Miner MK2 - Impure": 1,
+            "Makes": 1
+        },
+        {
+            "Miner MK2 - Normal": 1,
+            "Makes": 1
+        },
+        {
+            "Miner MK2 - Pure": 1,
+            "Makes": 1
+        },
+        {
+            "Miner MK3 - Impure": 1,
+            "Makes": 1
+        },
+        {
+            "Miner MK3 - Normal": 1,
+            "Makes": 1
+        },
+        {
+            "Miner MK3 - Pure": 1,
+            "Makes": 1
+        }
+    ],
+    "Limestone": [
+        {
+            "Harvest": 1,
+            "Makes": 1
+        },
+        {
+            "Portable Miner - Impure": 1,
+            "Makes": 1
+        },
+        {
+            "Portable Miner - Normal": 1,
+            "Makes": 1
+        },
+        {
+            "Portable Miner - Pure": 1,
+            "Makes": 1
+        },
+        {
+            "Miner MK1 - Impure": 1,
+            "Makes": 1
+        },
+        {
+            "Miner MK1 - Normal": 1,
+            "Makes": 1
+        },
+        {
+            "Miner MK1 - Pure": 1,
+            "Makes": 1
+        },
+        {
+            "Miner MK2 - Impure": 1,
+            "Makes": 1
+        },
+        {
+            "Miner MK2 - Normal": 1,
+            "Makes": 1
+        },
+        {
+            "Miner MK2 - Pure": 1,
+            "Makes": 1
+        },
+        {
+            "Miner MK3 - Impure": 1,
+            "Makes": 1
+        },
+        {
+            "Miner MK3 - Normal": 1,
+            "Makes": 1
+        },
+        {
+            "Miner MK3 - Pure": 1,
+            "Makes": 1
+        }
+    ],
+    "Crude Oil": [
+        {
+            "Harvest": 1,
+            "Makes": 1
+        }
+    ],
+    "Silica": [
+        {
+            "Harvest": 1,
+            "Makes": 1
+        }
+    ],
+    "Sulfur": [
+        {
+            "Harvest": 1,
+            "Makes": 1
+        },
+        {
+            "Portable Miner - Impure": 1,
+            "Makes": 1
+        },
+        {
+            "Portable Miner - Normal": 1,
+            "Makes": 1
+        },
+        {
+            "Portable Miner - Pure": 1,
+            "Makes": 1
+        },
+        {
+            "Miner MK1 - Impure": 1,
+            "Makes": 1
+        },
+        {
+            "Miner MK1 - Normal": 1,
+            "Makes": 1
+        },
+        {
+            "Miner MK1 - Pure": 1,
+            "Makes": 1
+        },
+        {
+            "Miner MK2 - Impure": 1,
+            "Makes": 1
+        },
+        {
+            "Miner MK2 - Normal": 1,
+            "Makes": 1
+        },
+        {
+            "Miner MK2 - Pure": 1,
+            "Makes": 1
+        },
+        {
+            "Miner MK3 - Impure": 1,
+            "Makes": 1
+        },
+        {
+            "Miner MK3 - Normal": 1,
+            "Makes": 1
+        },
+        {
+            "Miner MK3 - Pure": 1,
+            "Makes": 1
+        }
+    ],
+    "Uranium": [
+        {
+            "Harvest": 1,
+            "Makes": 1
+        },
+        {
+            "Portable Miner - Impure": 1,
+            "Makes": 1
+        },
+        {
+            "Portable Miner - Normal": 1,
+            "Makes": 1
+        },
+        {
+            "Portable Miner - Pure": 1,
+            "Makes": 1
+        },
+        {
+            "Miner MK1 - Impure": 1,
+            "Makes": 1
+        },
+        {
+            "Miner MK1 - Normal": 1,
+            "Makes": 1
+        },
+        {
+            "Miner MK1 - Pure": 1,
+            "Makes": 1
+        },
+        {
+            "Miner MK2 - Impure": 1,
+            "Makes": 1
+        },
+        {
+            "Miner MK2 - Normal": 1,
+            "Makes": 1
+        },
+        {
+            "Miner MK2 - Pure": 1,
+            "Makes": 1
+        },
+        {
+            "Miner MK3 - Impure": 1,
+            "Makes": 1
+        },
+        {
+            "Miner MK3 - Normal": 1,
+            "Makes": 1
+        },
+        {
+            "Miner MK3 - Pure": 1,
+            "Makes": 1
+        }
+    ],
+    "Raw Quartz": [
+        {
+            "Harvest": 1,
+            "Makes": 1
+        },
+        {
+            "Portable Miner - Impure": 1,
+            "Makes": 1
+        },
+        {
+            "Portable Miner - Normal": 1,
+            "Makes": 1
+        },
+        {
+            "Portable Miner - Pure": 1,
+            "Makes": 1
+        },
+        {
+            "Miner MK1 - Impure": 1,
+            "Makes": 1
+        },
+        {
+            "Miner MK1 - Normal": 1,
+            "Makes": 1
+        },
+        {
+            "Miner MK1 - Pure": 1,
+            "Makes": 1
+        },
+        {
+            "Miner MK2 - Impure": 1,
+            "Makes": 1
+        },
+        {
+            "Miner MK2 - Normal": 1,
+            "Makes": 1
+        },
+        {
+            "Miner MK2 - Pure": 1,
+            "Makes": 1
+        },
+        {
+            "Miner MK3 - Impure": 1,
+            "Makes": 1
+        },
+        {
+            "Miner MK3 - Normal": 1,
+            "Makes": 1
+        },
+        {
+            "Miner MK3 - Pure": 1,
+            "Makes": 1
+        }
+    ],
+    "Bauxite": [
+        {
+            "Harvest": 1,
+            "Makes": 1
+        },
+        {
+            "Portable Miner - Impure": 1,
+            "Makes": 1
+        },
+        {
+            "Portable Miner - Normal": 1,
+            "Makes": 1
+        },
+        {
+            "Portable Miner - Pure": 1,
+            "Makes": 1
+        },
+        {
+            "Miner MK1 - Impure": 1,
+            "Makes": 1
+        },
+        {
+            "Miner MK1 - Normal": 1,
+            "Makes": 1
+        },
+        {
+            "Miner MK1 - Pure": 1,
+            "Makes": 1
+        },
+        {
+            "Miner MK2 - Impure": 1,
+            "Makes": 1
+        },
+        {
+            "Miner MK2 - Normal": 1,
+            "Makes": 1
+        },
+        {
+            "Miner MK2 - Pure": 1,
+            "Makes": 1
+        },
+        {
+            "Miner MK3 - Impure": 1,
+            "Makes": 1
+        },
+        {
+            "Miner MK3 - Normal": 1,
+            "Makes": 1
+        },
+        {
+            "Miner MK3 - Pure": 1,
+            "Makes": 1
+        }
+    ],
+    "Leaves": [
+        {
+            "Harvest": 1,
+            "Makes": 1
+        }
+    ],
+    "Wood": [
+        {
+            "Harvest": 1,
+            "Makes": 1
+        }
+    ],
+    "Flower Petals": [
+        {
+            "Harvest": 1,
+            "Makes": 1
+        }
+    ],
+    "Alien Carapace": [
+        {
+            "Harvest": 1,
+            "Makes": 1
+        }
+    ],
+    "Green Power Slug": [
+        {
+            "Harvest": 1,
+            "Makes": 1
+        }
+    ],
+    "Yellow Power Slug": [
+        {
+            "Harvest": 1,
+            "Makes": 1
+        }
+    ],
+    "Purple Power Slug": [
+        {
+            "Harvest": 1,
+            "Makes": 1
+        }
+    ],
+    "Mycelia": [
+        {
+            "Harvest": 1,
+            "Makes": 1
+        }
+    ],
+    "Iron Ingot": [
+        {
+            "Iron Ore": 1,
+            "Makes": 1
+        },
+        {
+            "Iron Ore": 1,
+            "Copper Ore": 1,
+            "Makes": 3,
+            "Alternative": true
+        }
+    ],
+    "Copper Ingot": [
+        {
+            "Copper Ore": 1,
+            "Makes": 1
+        }
+    ],
+    "Caterium Ingot": [
+        {
+            "Caterium Ore": 4,
+            "Makes": 1
+        }
+    ],
+    "Steel Ingot": [
+        {
+            "Iron Ore": 3,
+            "Coal": 3,
+            "Makes": 2
+        },
+        {
+            "Iron Ingot": 3,
+            "Coal": 6,
+            "Makes": 6,
+            "Alternative": true
+        }
+    ],
+    "Aluminum Ingot": [],
+    "Plastic": [
+        {
+            "Crude Oil": 4,
+            "Makes": 3
+        }
+    ],
+    "Fuel": [
+        {
+            "Crude Oil": 8,
+            "Makes": 5
+        }
+    ],
+    "Rubber": [
+        {
+            "Crude Oil": 4,
+            "Makes": 4
+        }
+    ],
+    "Iron Plate": [
+        {
+            "Iron Ingot": 2,
+            "Makes": 1
+        }
+    ],
+    "Iron Rod": [
+        {
+            "Iron Ingot": 1,
+            "Makes": 1
+        }
+    ],
+    "Screw": [
+        {
+            "Iron Ingot": 2,
+            "Makes": 12,
+            "Alternative": true
+        },
+        {
+            "Iron Rod": 1,
+            "Makes": 6
+        }
+    ],
+    "Wire": [
+        {
+            "Iron Ingot": 2,
+            "Makes": 9,
+            "Alternative": true
+        },
+        {
+            "Copper Ingot": 1,
+            "Makes": 3
+        },
+        {
+            "Caterium Ingot": 1,
+            "Makes": 9,
+            "Alternative": true
+        }
+    ],
+    "Biomass": [
+        {
+            "Leaves": 10,
+            "Makes": 6
+        },
+        {
+            "Wood": 5,
+            "Makes": 25
+        },
+        {
+            "Mycelia": 10,
+            "Makes": 10
+        },
+        {
+            "Alien Carapace": 1,
+            "Makes": 100
+        }
+    ],
+    "Concrete": [
+        {
+            "Limestone": 3,
+            "Makes": 1
+        }
+    ],
+    "Power Shard": [
+        {
+            "Green Power Slug": 1,
+            "Makes": 1
+        },
+        {
+            "Yellow Power Slug": 1,
+            "Makes": 2
+        },
+        {
+            "Purple Power Slug": 1,
+            "Makes": 5
+        }
+    ],
+    "Cable": [
+        {
+            "Wire": 2,
+            "Makes": 1
+        },
+        {
+            "Wire": 3,
+            "Rubber": 2,
+            "Makes": 5
+        }
+    ],
+    "Biofuel": [
+        {
+            "Biomass": 4,
+            "Makes": 2
+        }
+    ],
+    "Steel Beam": [
+        {
+            "Steel Ingot": 3,
+            "Makes": 1
+        }
+    ],
+    "Steel Pipe": [
+        {
+            "Steel Ingot": 1,
+            "Makes": 1
+        }
+    ],
+    "Color Cartridge": [
+        {
+            "Flower Petals": 25,
+            "Makes": 50
+        }
+    ],
+    "Spiked Rebar": [
+        {
+            "Iron Rod": 1,
+            "Makes": 1
+        }
+    ],
+    "Quickwire": [
+        {
+            "Caterium Ingot": 1,
+            "Makes": 9
+        },
+        {
+            "Caterium Ingot": 1,
+            "Copper Ingot": 2,
+            "Makes": 12
+        }
+    ],
+    "Reinforced Iron Plate": [
+        {
+            "Iron Plate": 4,
+            "Screw": 24,
+            "Makes": 1
+        },
+        {
+            "Iron Plate": 10,
+            "Screw": 24,
+            "Makes": 3,
+            "Alternative": true
+        },
+        {
+            "Iron Plate": 6,
+            "Wire": 30,
+            "Makes": 3,
+            "Alternative": true
+        }
+    ],
+    "Modular Frame": [
+        {
+            "Reinforced Iron Plate": 3,
+            "Iron Rod": 6,
+            "Makes": 1
+        },
+        {
+            "Reinforced Iron Plate": 6,
+            "Steel Pipe": 6,
+            "Makes": 3,
+            "Alternative": true
+        }
+    ],
+    "Encased Industrial Beam": [
+        {
+            "Steel Beam": 4,
+            "Concrete": 5,
+            "Makes": 1
+        },
+        {
+            "Steel Pipe": 18,
+            "Concrete": 10,
+            "Makes": 3,
+            "Alternative": true
+        }
+    ],
+    "Rotor": [
+        {
+            "Iron Rod": 3,
+            "Screw": 22,
+            "Makes": 1
+        },
+        {
+            "Wire": 20,
+            "Steel Pipe": 6,
+            "Makes": 3,
+            "Alternative": true
+        }
+    ],
+    "Stator": [
+        {
+            "Steel Pipe": 3,
+            "Wire": 10,
+            "Makes": 1
+        },
+        {
+            "Quickwire": 25,
+            "Steel Pipe": 6,
+            "Makes": 3,
+            "Alternative": true
+        }
+    ],
+    "Motor": [
+        {
+            "Rotor": 2,
+            "Stator": 2,
+            "Makes": 1
+        }
+    ],
+    "Fabric": [
+        {
+            "Mycelia": 1,
+            "Leaves": 2,
+            "Makes": 1
+        }
+    ],
+    "Circuit Board": [
+        {
+            "Plastic": 6,
+            "Wire": 12,
+            "Makes": 1
+        },
+        {
+            "Rubber": 16,
+            "Wire": 24,
+            "Makes": 3
+        },
+        {
+            "Plastic": 12,
+            "Quickwire": 32,
+            "Makes": 3
+        }
+    ],
+    "A.I. Limiter": [
+        {
+            "Circuit Board": 1,
+            "Quickwire": 18,
+            "Makes": 1
+        }
+    ],
+    "Heavy Modular Frame": [
+        {
+            "Modular Frame": 5,
+            "Steel Pipe": 15,
+            "Encased Industrial Beam": 5,
+            "Screw": 90,
+            "Makes": 1
+        },
+        {
+            "Modular Frame": 8,
+            "Steel Pipe": 36,
+            "Encased Industrial Beam": 10,
+            "Concrete": 25,
+            "Makes": 3,
+            "Alternative": true
+        }
+    ],
+    "Computer": [
+        {
+            "Circuit Board": 5,
+            "Cable": 12,
+            "Plastic": 18,
+            "Screw": 60,
+            "Makes": 1
+        },
+        {
+            "Circuit Board": 10,
+            "Quickwire": 112,
+            "Rubber": 48,
+            "Makes": 3,
+            "Alternative": true
+        }
+    ],
+    "High-Speed Connector": [
+        {
+            "Quickwire": 40,
+            "Cable": 10,
+            "Plastic": 6,
+            "Makes": 1
+        }
+    ],
+    "Supercomputer": [
+        {
+            "Computer": 2,
+            "A.I. Limiter": 2,
+            "Plastic": 21,
+            "High-Speed Connector": 3,
+            "Makes": 1
+        }
+    ],
+    "Filter": [
+        {
+            "Coal": 5,
+            "Rubber": 2,
+            "Fabric": 2,
+            "Makes": 1
+        }
+    ]
+}

@@ -1,121 +1,126 @@
 {
+    "Harvest": [
+        {
+            "Makes": 1
+        }
+    ],
     "Iron Ore": [
         {
-            "Harvest": true,
+            "Harvest": 1,
             "Makes": 1
         }
     ],
     "Copper Ore": [
         {
-            "Harvest": true,
+            "Harvest": 1,
             "Makes": 1
         }
     ],
     "Coal": [
         {
-            "Harvest": true,
+            "Harvest": 1,
             "Makes": 1
         }
     ],
     "Caterium Ore": [
         {
-            "Harvest": true,
+            "Harvest": 1,
             "Makes": 1
         }
     ],
     "S.A.M. Ore": [
         {
-            "Harvest": true,
+            "Harvest": 1,
             "Makes": 1
         }
     ],
     "Limestone": [
         {
-            "Harvest": true,
+            "Harvest": 1,
             "Makes": 1
         }
     ],
     "Crude Oil": [
         {
-            "Harvest": true,
+            "Harvest": 1,
             "Makes": 1
         }
     ],
     "Silica": [
         {
-            "Harvest": true,
+            "Harvest": 1,
             "Makes": 1
         }
     ],
     "Sulfur": [
         {
-            "Harvest": true,
+            "Harvest": 1,
             "Makes": 1
         }
     ],
     "Uranium": [
         {
-            "Harvest": true,
+            "Harvest": 1,
             "Makes": 1
         }
     ],
     "Raw Quartz": [
         {
-            "Harvest": true,
+            "Harvest": 1,
             "Makes": 1
         }
     ],
     "Bauxite": [
         {
-            "Harvest": true,
+            "Harvest": 1,
             "Makes": 1
         }
     ],
     "Leaves": [
         {
-            "Harvest": true,
+            "Harvest": 1,
             "Makes": 1
         }
     ],
     "Wood": [
         {
-            "Harvest": true,
+            "Harvest": 1,
             "Makes": 1
         }
     ],
     "Flower Petals": [
         {
-            "Harvest": true,
+            "Harvest": 1,
             "Makes": 1
         }
     ],
     "Alien Carapace": [
         {
-            "Harvest": true,
+            "Harvest": 1,
             "Makes": 1
         }
     ],
     "Green Power Slug": [
         {
-            "Harvest": true,
+            "Harvest": 1,
             "Makes": 1
         }
     ],
     "Yellow Power Slug": [
         {
-            "Harvest": true,
+            "Harvest": 1,
             "Makes": 1
         }
     ],
     "Purple Power Slug": [
         {
-            "Harvest": true,
+            "Harvest": 1,
             "Makes": 1
         }
     ],
     "Mycelia": [
         {
-            "Harvest": true,
+            "Harvest": 1,
             "Makes": 1
         }
     ],

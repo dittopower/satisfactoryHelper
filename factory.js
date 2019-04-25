@@ -1,16 +1,22 @@
 let recipes = {};
+let machineRecipes = {};
 const aside = document.getElementsByTagName("aside")[0];
 const outputQuantity = document.getElementById("quantity");
 const functionTypeSelector = document.getElementById("functionType");
+const recipeTypeSelector = document.getElementById("recipeType");
 const article = document.getElementsByTagName("article")[0];
 const table = document.getElementsByTagName("table")[0];
 let currentRecipe = undefined;
 let currentQuantity = 1;
 let currentTypeMode = functionTypeSelector.value;
+let currentRecipeMode = recipeTypeSelector.value;
 const typeModeList = {
     "new": "v2",
-    "machine": "machine",
     "manager": "manager"
+};
+const recipeModeList = {
+    "normal": "normal",
+    "machine": "machine"
 };
 let trackingRows = [];
 let trackingColumns = [];
@@ -34,7 +40,7 @@ fetch(`${location.protocol}//${location.host}/recipes.json`).then(
         calcTiers();
         // TODO: determine a colour scheme for each item
 
-        for (let recipe in recipes) {
+        for (let recipe in getRecipes()) {
             let entry = document.createElement("li");
             entry.textContent = `${recipe}`;
             let colours = calcTierColour(getTotalCraftingTier(), getRecipeCraftingTier(recipe));
@@ -43,8 +49,25 @@ fetch(`${location.protocol}//${location.host}/recipes.json`).then(
         }
         sidebar.addEventListener("click", selectRecipe);
         outputQuantity.addEventListener("change", selectRecipe);
+
+        recipeTypeSelector.addEventListener("change", changeSource);
+        changeSource(recipeTypeSelector.value);
         functionTypeSelector.addEventListener("change", changeType);
         changeType(functionTypeSelector.value);
+    }
+);
+fetch(`${location.protocol}//${location.host}/machineRecipes.json`).then(
+    (resp) => {
+        console.info(resp);
+        return resp.json();
+    },
+    (error) => {
+        console.error(error);
+        alert("Failed to load machineRecipes.");
+    }
+).then(
+    (packageJson) => {
+        machineRecipes = packageJson;
     }
 );
 
@@ -61,10 +84,33 @@ function changeType(event) {
             displayRecipeManager();
             break;
         default:
-            selectRecipe(event);
+            if (typeof event == "object") {
+                selectRecipe(event);
+            }
             break;
     }
     logEnd("changeType");
+}
+
+function changeSource(event) {
+    logBegin("changeSource", arguments);
+    if (typeof event == "object") {
+        currentRecipeMode = event.target.value;
+    } else {
+        currentRecipeMode = event;
+    }
+    v2resetDisplay();
+    switch (currentTypeMode) {
+        case typeModeList.manager:
+            displayRecipeManager();
+            break;
+        default:
+            if (typeof event == "object") {
+                selectRecipe(event);
+            }
+            break;
+    }
+    logEnd("changeSource");
 }
 
 function clearDisplay() {
@@ -102,7 +148,7 @@ function calcTiers() {
     logBegin();
     allowedCalcs--;
     let changed = 0;
-    for (let recipe in recipes) {
+    for (let recipe in getRecipes()) {
         let init = getRecipeCraftingTier(recipe);
 
         for (let comp in getRecipe(recipe)) {
@@ -137,15 +183,6 @@ function calcTiers() {
 
 function selectRecipe(event) {
     logBegin(event);
-    // TODO: allow the disabling of certain alternate recipes
-    if (currentTypeMode == typeModeList.machine) {
-        // TODO: use alternate recipe numbers for machine recipes flow (per minute)
-        clearDisplay();
-        let temp = document.createElement("h3");
-        temp.innerText = "N.Y.I.";
-        table.appendChild(temp);
-        return;
-    }
 
     if (/INPUT/.test(event.target.tagName)) {
         if (!isNaN(outputQuantity.value)) {
@@ -215,8 +252,14 @@ function logEndSub() {
     console.debug(`    {FINISH}${func.split(/ |\./).pop()}`, JSON.stringify(arguments));
 }
 
+function getRecipes(){
+    if(currentRecipeMode == recipeModeList.machine){
+        return machineRecipes;
+    }
+    return recipes;
+}
 function getRecipe(data) {
-    return recipes[data];
+    return getRecipes()[data];
 }
 function getRecipeOption(data, option) {
     return getRecipe(data)[option];
@@ -358,9 +401,9 @@ function buildRecipeView(data, quantity, depth = 0) {
         if (getRecipeOptionEnabled(data, option)) {
 
             // Is this a harvest/gather or a craft?
-            if (recipeOption["Harvest"]) {
-                console.debug("harvest");
-            } else {
+            // if (recipeOption["Harvest"]) {
+            //     console.debug("harvest");
+            // } else {
                 console.debug("craft");
                 // Get the ingredient stages
                 for (let ingredient in recipeOption) {
@@ -368,7 +411,7 @@ function buildRecipeView(data, quantity, depth = 0) {
                         buildRecipeView(ingredient, multiple, depth + 1);
                     }
                 }
-            }
+            // }
         }
         v2mark(depth);
 
@@ -465,7 +508,7 @@ function v2FormatData(data, option, multiple) {
 function displayRecipeManager() {
     logBegin("displayRecipeManager");
     v2resetDisplay();
-    for (let entry in recipes) {
+    for (let entry in getRecipes()) {
         const recipe = getRecipe(entry);
         addItemToManager(0, entry);
         for (let variant in recipe) {
