@@ -16,7 +16,7 @@ aside li:hover {
 }
 
 aside {
-    width: 19.6%;
+    width: 19%;
     height: calc(100% - 71px - 39px);
     display: inline-block;
     /* padding-right: 10px; */
