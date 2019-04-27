@@ -194,24 +194,24 @@
     ],
     "Screw": [
         {
+            "Iron Rod": 1,
+            "Makes": 6
+        },
+        {
             "Iron Ingot": 2,
             "Makes": 12,
             "Alternative": true
-        },
-        {
-            "Iron Rod": 1,
-            "Makes": 6
         }
     ],
     "Wire": [
         {
+            "Copper Ingot": 1,
+            "Makes": 3
+        },
+        {
             "Iron Ingot": 2,
             "Makes": 9,
             "Alternative": true
-        },
-        {
-            "Copper Ingot": 1,
-            "Makes": 3
         },
         {
             "Caterium Ingot": 1,
@@ -403,12 +403,14 @@
         {
             "Rubber": 16,
             "Wire": 24,
-            "Makes": 3
+            "Makes": 3,
+            "Alternative": true
         },
         {
             "Plastic": 12,
             "Quickwire": 32,
-            "Makes": 3
+            "Makes": 3,
+            "Alternative": true
         }
     ],
     "A.I. Limiter": [
