@@ -38,7 +38,6 @@ fetch(`${location.protocol}//${location.host}/recipes.json`).then(
 		aside.appendChild(sidebar);
 
 		calcTiers();
-		// TODO: determine a colour scheme for each item
 
 		for (let recipe in getRecipes()) {
 			let entry = document.createElement("li");
@@ -196,7 +195,6 @@ function selectRecipe(event) {
 		}
 	}
 	if (currentRecipe && currentQuantity) {
-		// TODO: use worker for calculations
 		window.requestIdleCallback(() => {
 			console.info(`Start Mode ${currentTypeMode} Making ${currentRecipe}`);
 			switch (currentTypeMode) {
@@ -410,7 +408,6 @@ function buildRecipeView(data, quantity, depth = 0) {
 
 		logEndSub("buildRecipeViewOption", data, option);
 	}
-	// TODO: summary column?
 	logEnd();
 	return depth;
 }
@@ -611,7 +608,6 @@ function updateRecipeOptionEnabledStatus(event) {
 	if (/enable/i.test(event.target.value)) {
 		setRecipeOptionEnabled(recipe, option, true);
 	} else {
-		// TODO: Maybe prevent disabling all recipes?
 		setRecipeOptionEnabled(recipe, option, false);
 	}
 	let toggleEnabled = event.target;

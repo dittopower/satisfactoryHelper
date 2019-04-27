@@ -1,0 +1,10 @@
+[Service worker] Notify user to reload if a newer version is available.
+[HTML] Move aside next to header.
+[JS] Dynamic per item colour scheme.
+[JS]{Consider} Using JS workers for long running calculations.
+[JS] Recipe Lookup summary column.
+[JS]{Consider} Prevent disabling all recipe variants
+[HTML] Meta tags for sharing and SEO.
+[JS] Sharing Links.
+[JS] Remember current view.
+[JS] Recipe List sorting options
