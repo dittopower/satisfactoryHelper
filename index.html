@@ -37,28 +37,37 @@
 
 <body>
 	<header>
+		<a href="https://deamon.info">
+			<h1 id="deamon">Deamon's </h1>
+		</a>
 		<a href="https://www.satisfactorygame.com">
-			<img src="//static1.squarespace.com/static/59e891bfa9db098f5ced6591/t/5b17ebb72b6a28368202c163/1554276022912/?format=1500w"
-				alt="Satisfactory">
+			<h1 id="satisfactoryHelper">Satisfactory Helper</h1>
 		</a>
 	</header>
 	<aside>
-		<select id="functionType">
-			<option value="v2">Recipe Lookup</option>
-			<option value="manager">Recipe Manager</option>
-		</select>
-		<select id="recipeType">
-			<option value="normal">Normal</option>
-			<option value="machine">Automation</option>
-		</select>
-		<label for="quantity">Quantity</label>
-		<input type="number" id="quantity" name="quantity" value="1" />
 	</aside>
 	<article>
 		<table></table>
 	</article>
 	<footer>
-		Tool by Deamon.
+		<form>
+			<fieldset>
+				<label for="functionType">Mode: </label>
+				<select id="functionType">
+					<option value="v2">Recipe Lookup</option>
+					<option value="manager">Recipe Manager</option>
+				</select>
+			</fieldset><fieldset>
+				<label for="recipeType">Recipe Type: </label>
+				<select id="recipeType">
+					<option value="normal">Normal</option>
+					<option value="machine">Automation</option>
+				</select>
+			</fieldset><fieldset>
+				<label for="quantity">Quantity: </label>
+				<input type="number" id="quantity" name="quantity" value="1" />
+			</fieldset>
+		</form>
 	</footer>
 </body>
 

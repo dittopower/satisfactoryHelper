@@ -16,10 +16,10 @@ aside li:hover {
 }
 
 aside {
-    width: 19%;
-    height: calc(100% - 130px);
+    width: 19.6%;
+    height: calc(100% - 71px - 39px);
     display: inline-block;
-    padding-right: 10px;
+    /* padding-right: 10px; */
     background: #fff;
     color: #100806;
 }
@@ -31,27 +31,48 @@ aside ul {
 
 article {
     width: 80%;
-    top: 0;
     display: inline-block;
-    height: calc(100% - 130px);
+    height: calc(100% - 71px - 39px);
     overflow: auto;
     background-color: #100806;
+    vertical-align: top;
 }
 
 header {
     text-align: center;
-    padding: 20px;
+    padding: 5px;
     background-color: #fff;
-}
-
-header img {
-    font-size: 4em;
-    margin: 0;
-    height: 50px;
 }
 
 header a {
     text-decoration: none;
+}
+
+header h1 {
+    font-size: 50px;
+    margin: 0;
+    display: inline;
+}
+
+header #satisfactoryHelper {
+    color: white;
+    text-transform: uppercase;
+    font-variant-caps: petite-caps;
+    font-family: fantasy;
+    text-shadow: -3px -3px 0 #666666, 3px -3px 0 #666666, -3px 3px 0 #666666, 3px 3px 0 #666666;
+    letter-spacing: -2;
+}
+
+/* header #deamon {
+    color: #c80000;
+    font-family: fantasy;
+} */
+
+header #deamon {
+    color: #c80000;
+    font-family: monospace;
+    text-shadow: -2px -2px 0 #000000, 2px -2px 0 #000000, -2px 2px 0 #000000, 2px 2px 0 #000000;
+    /* letter-spacing: -5; */
 }
 
 body {
@@ -80,8 +101,14 @@ article table tr th {
 }
 
 footer {
-    background-color: #fff;
-    text-align: right;
+    text-align: center;
+}
+
+fieldset {
+    display: inline-block;
+    padding: 5px;
+    margin-inline-start: 10px;
+    margin-inline-end: 10px;
 }
 
 input#quantity {
