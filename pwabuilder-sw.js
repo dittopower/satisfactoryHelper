@@ -32,7 +32,7 @@ self.addEventListener("activate", function (event) {
 });
 
 // If any fetch fails, it will look for the request in the cache and serve it from there first
-self.addEventListener("fetch", function (event) { 
+self.addEventListener("fetch", function (event) {
 	if (event.request.method !== "GET") return;
 
 	event.respondWith(
@@ -68,7 +68,7 @@ self.addEventListener("fetch", function (event) {
 });
 
 function fromCache(request) {
-	if (/https?:\/\/127.0.0.1:8081/.test(request.url)){
+	if (/https?:\/\/127.0.0.1:8081/.test(request.url)) {
 		return Promise.reject("Localhost development version");
 	}
 	// Check to see if you have it in the cache
@@ -86,7 +86,9 @@ function fromCache(request) {
 }
 
 function updateCache(request, response) {
-	return caches.open(CACHE).then(function (cache) {
-		return cache.put(request, response);
-	});
+	if (!/chrome-extension:\/\//.test(request.url)) {
+		return caches.open(CACHE).then(function (cache) {
+			return cache.put(request, response);
+		});
+	}
 }

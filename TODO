@@ -9,5 +9,4 @@
 [JS] Remember current view.
 [JS] Recipe List sorting options
 [CSS] variables for re-used colours
-[Service worker] Hanlde "Uncaught (in promise) TypeError: Request scheme 'chrome-extension' is unsupported".
 [CSS] Replace inline-block with flexbox or grid.
