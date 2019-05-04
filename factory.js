@@ -195,6 +195,21 @@ function minMaxRGB(value) {
 }
 
 
+function percentToColour(percent) {
+	// percent as a decimal i.e. 0.5 == 50%
+
+	const max = 256;
+	const total = max ** 3; // 16777216 possible colour combinations
+	const square = max ** 2; // 65536 number of possibilities for the other colours per value of colour X
+	const value = Math.round(total * percent); // Percentage's combination
+
+	let red = Math.trunc(value / square) % 256; // mod by 256 to ensure our max value is 255 (not 256 or higher)
+	let green = Math.trunc(value / square % 1 * max) % 256;
+	let blue = Math.round(value / square % (1 / max) * square) % 256;
+
+	return [red, green, blue];
+}
+
 function calcTierColour(totalTiers, thisTier) {
 	logBeginSub(arguments);
 	totalTiers = Number.parseInt(totalTiers);
@@ -202,37 +217,29 @@ function calcTierColour(totalTiers, thisTier) {
 	const colours = new Array();
 
 	const modifier = thisTier / totalTiers;
-	const max = 256;
-	const total = max ** 3;
-	const square = max ** 2;
-	const value = Math.round(total * modifier);
 
 	// let hex = value.toString(16);
 	// colours["red"] = +("0x" + hex.substr(0, hex.length / 3));
 	// colours["green"] = +("0x" + hex.substr(hex.length / 3, hex.length / 3));
 	// colours["blue"] = +("0x" + hex.substr(hex.length / 3 * 2, hex.length / 3));
-	let one, two, three = "";
+	let temp = percentToColour(modifier);
 	switch (colourScheme) {
 		case colourSchemeList.ingredientG:
-			one = "blue";
-			two = "red";
-			three = "green";
+			colours["blue"] = temp[2];
+			colours["red"] = temp[1];
+			colours["green"] = temp[0];
 			break;
 		case colourSchemeList.ingredientR:
-			one = "red";
-			two = "green";
-			three = "blue";
+			colours["red"] = temp[2];
+			colours["green"] = temp[1];
+			colours["blue"] = temp[0];
 			break;
 		default:
-			one = "blue";
-			two = "green";
-			three = "red";
+			colours["blue"] = temp[2];
+			colours["green"] = temp[1];
+			colours["red"] = temp[0];
 			break;
 	}
-
-	colours[one] = Math.round(value / square % (1 / max) * square);
-	colours[two] = Math.trunc(value / square % 1 * max);
-	colours[three] = Math.trunc(value / square);
 
 	logEndSub(colours);
 	return colours;
