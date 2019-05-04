@@ -22,7 +22,9 @@ const recipeModeList = {
 };
 const colourSchemeList = {
 	"crafting": "crafting",
-	"ingredient": "ingredient"
+	"ingredientB": "ingredientB",
+	"ingredientG": "ingredientG",
+	"ingredientR": "ingredientR"
 };
 let trackingRows = [];
 let trackingColumns = [];
@@ -111,10 +113,10 @@ function runAsync(func) {
 
 function recipeColours(recipe) {
 	switch (colourScheme) {
-		case colourSchemeList.ingredient:
-			return calcTierColour(totalItems, getRecipeNumber(recipe));
-		default:
+		case colourSchemeList.crafting:
 			return calcTierColour(getTotalCraftingTier(), getRecipeCraftingTier(recipe));
+		default:
+			return calcTierColour(totalItems, getRecipeNumber(recipe));
 	}
 }
 
@@ -181,29 +183,58 @@ function clearDisplay() {
 	})
 }
 
+function minMax(value, min, max) {
+	return Math.max( //Value should not be smaller than min
+		min,
+		Math.min(max, value) //Value should not be larger than max
+	);
+}
+
+function minMaxRGB(value) {
+	return minMax(value, 0, 200);
+}
+
+
 function calcTierColour(totalTiers, thisTier) {
 	logBeginSub(arguments);
 	totalTiers = Number.parseInt(totalTiers);
 	thisTier = Number.parseInt(thisTier);
-	const modifier = (thisTier + 1) / (totalTiers + 1);
-	const total = 255 * 3 * modifier;
-	const thirds = 256 / 3;
 	const colours = new Array();
-	if (total < 256) {
-		colours["green"] = thirds * 3 * modifier;
-		colours["blue"] = thirds * 2 * modifier;
-		colours["red"] = thirds * 1 * modifier;
-	} else if (total < 512) {
-		colours["green"] = thirds * 1 * modifier;
-		colours["blue"] = thirds * 3 * modifier;
-		colours["red"] = thirds * 2 * modifier;
-	} else {
-		colours["green"] = thirds * 2 * modifier;
-		colours["blue"] = thirds * 1 * modifier;
-		colours["red"] = thirds * 3 * modifier;
+
+	const modifier = thisTier / totalTiers;
+	const max = 256;
+	const total = max ** 3;
+	const square = max ** 2;
+	const value = Math.round(total * modifier);
+
+	// let hex = value.toString(16);
+	// colours["red"] = +("0x" + hex.substr(0, hex.length / 3));
+	// colours["green"] = +("0x" + hex.substr(hex.length / 3, hex.length / 3));
+	// colours["blue"] = +("0x" + hex.substr(hex.length / 3 * 2, hex.length / 3));
+	let one, two, three = "";
+	switch (colourScheme) {
+		case colourSchemeList.ingredientG:
+			one = "blue";
+			two = "red";
+			three = "green";
+			break;
+		case colourSchemeList.ingredientR:
+			one = "red";
+			two = "green";
+			three = "blue";
+			break;
+		default:
+			one = "blue";
+			two = "green";
+			three = "red";
+			break;
 	}
 
-	logEndSub();
+	colours[one] = Math.round(value / square % (1 / max) * square);
+	colours[two] = Math.trunc(value / square % 1 * max);
+	colours[three] = Math.trunc(value / square);
+
+	logEndSub(colours);
 	return colours;
 }
 

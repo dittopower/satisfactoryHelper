@@ -78,6 +78,7 @@ header #deamon {
 body {
     margin: 0;
     overflow: hidden;
+    background: #ffffff;
 }
 
 article table {
