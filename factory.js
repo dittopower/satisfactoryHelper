@@ -97,7 +97,7 @@ function generateSideList() {
 		entry.textContent = `${getRecipeNumber(recipe)} | ${isNaN(getRecipeCraftingTier(recipe)) ? "-" : getRecipeCraftingTier(recipe)} |   ${recipe}`;
 		entry.data = recipe;
 		let colours = recipeColours(recipe);
-		entry.style.backgroundColor = `rgba(${colours["red"]},${colours["green"]},${colours["blue"]},0.5)`;
+		entry.style.backgroundColor = `rgba(${colours["red"]},${colours["green"]},${colours["blue"]},0.6)`;
 		sidebar.appendChild(entry);
 		// });
 	});
@@ -509,6 +509,7 @@ function v2resetDisplay() {
 	}
 	trackingRows = [];
 	trackingColumns = [];
+	oddRow = true;
 	clearDisplay();
 }
 
@@ -527,7 +528,7 @@ function v2addIngredient(content, column) {
 		trackingRows.push(tr);
 		table.appendChild(tr);
 		let num = Math.max(256 - 20 * trackingRows.length, 20);
-		tr.style.backgroundColor = `rgba(${num},${num},${num},${oddRow ? "0.2" : "0.3"})`;
+		tr.style.backgroundColor = `rgba(${num},${num},${num},${oddRow ? "0.0" : "0.1"})`;
 	}
 	for (const row in trackingRows) {
 		let tr = trackingRows[row];
@@ -576,9 +577,9 @@ function v2FormatData(data, option, multiple) {
 	let colours = recipeColours(data);
 	if (!getRecipeOptionEnabled(data, option)) {
 		td.style.textDecoration = "line-through wavy black";
-		td.style.backgroundColor = `rgba(${colours["red"]},${colours["green"]},${colours["blue"]},0.1)`;
+		td.style.backgroundColor = `rgba(${colours["red"]},${colours["green"]},${colours["blue"]},0.3)`;
 	} else {
-		td.style.backgroundColor = `rgba(${colours["red"]},${colours["green"]},${colours["blue"]},0.4)`;
+		td.style.backgroundColor = `rgba(${colours["red"]},${colours["green"]},${colours["blue"]},0.6)`;
 	}
 
 	td.appendChild(ul);
@@ -625,7 +626,7 @@ function addItemToManager(column, recipe, option) {
 		trackingRows.push(tr);
 		table.appendChild(tr);
 		let num = Math.max(256 - 40 * trackingRows.length, 20);
-		tr.style.backgroundColor = `rgba(${num},${num},255,${oddRow ? "0.2" : "0.3"})`;
+		tr.style.backgroundColor = `rgba(${num},${num},255,${oddRow ? "0.0" : "0.1"})`;
 	}
 	for (const row in trackingRows) {
 		let tr = trackingRows[row];
@@ -675,12 +676,13 @@ function addItemToManager(column, recipe, option) {
 
 		} else {
 			const ul = document.createElement("ul");
-
 			let li = document.createElement("li");
 			li.innerText = `${recipe}`;
 			ul.appendChild(li);
-
 			td.appendChild(ul);
+
+			let colours = recipeColours(recipe);
+			td.style.backgroundColor = `rgba(${colours["red"]},${colours["green"]},${colours["blue"]},0.6)`;
 		}
 
 		tr.appendChild(td);

@@ -1,6 +1,5 @@
 [Service worker] Notify user to reload if a newer version is available.
 [HTML] Move aside next to header.
-[JS] Dynamic per item colour scheme.
 [JS]{Consider} Using JS workers for long running calculations.
 [JS] Recipe Lookup summary column.
 [JS]{Consider} Prevent disabling all recipe variants
@@ -11,3 +10,4 @@
 [CSS] variables for re-used colours
 [CSS] Replace inline-block with flexbox or grid.
 [SERVER] Dynamic rendering for some user agents: https://developers.google.com/search/docs/guides/dynamic-rendering
+[JS] scrolling searches for lists
