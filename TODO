@@ -5,8 +5,9 @@
 [JS] Recipe Lookup summary column.
 [JS]{Consider} Prevent disabling all recipe variants
 [HTML] Meta tags for sharing and SEO.
-[JS] Sharing Links.
+[JS] Sharing Links. https://developer.mozilla.org/en-US/docs/Web/API/History_API#Adding_and_modifying_history_entries
 [JS] Remember current view.
 [JS] Recipe List sorting options
 [CSS] variables for re-used colours
 [CSS] Replace inline-block with flexbox or grid.
+[SERVER] Dynamic rendering for some user agents: https://developers.google.com/search/docs/guides/dynamic-rendering

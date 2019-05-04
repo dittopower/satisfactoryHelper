@@ -4,12 +4,14 @@ const aside = document.getElementsByTagName("aside")[0];
 const outputQuantity = document.getElementById("quantity");
 const functionTypeSelector = document.getElementById("functionType");
 const recipeTypeSelector = document.getElementById("recipeType");
+const colourSchemeSelector = document.getElementById("colourScheme");
 const article = document.getElementsByTagName("article")[0];
 const table = document.getElementsByTagName("table")[0];
 let currentRecipe = undefined;
 let currentQuantity = 1;
 let currentTypeMode = functionTypeSelector.value;
 let currentRecipeMode = recipeTypeSelector.value;
+let colourScheme = colourSchemeSelector.value;
 const typeModeList = {
 	"new": "v2",
 	"manager": "manager"
@@ -18,9 +20,14 @@ const recipeModeList = {
 	"normal": "normal",
 	"machine": "machine"
 };
+const colourSchemeList = {
+	"crafting": "crafting",
+	"ingredient": "ingredient"
+};
 let trackingRows = [];
 let trackingColumns = [];
 let oddRow = true;
+let totalItems = 0;
 
 fetch(`${location.protocol}//${location.host}/recipes.json`).then(
 	(resp) => {
@@ -34,25 +41,19 @@ fetch(`${location.protocol}//${location.host}/recipes.json`).then(
 ).then(
 	(packageJson) => {
 		recipes = packageJson;
-		const sidebar = document.createElement("ul");
-		aside.appendChild(sidebar);
-
 		calcTiers();
+		calcNumbers();
+		calcTotal();
 
-		for (let recipe in getRecipes()) {
-			let entry = document.createElement("li");
-			entry.textContent = `${recipe}`;
-			let colours = calcTierColour(getTotalCraftingTier(), getRecipeCraftingTier(recipe));
-			entry.style.backgroundColor = `rgba(${colours["red"]},${colours["green"]},${colours["blue"]},0.5)`;
-			sidebar.appendChild(entry);
-		}
-		sidebar.addEventListener("click", selectRecipe);
+		runAsync(generateSideList);
+
 		outputQuantity.addEventListener("change", selectRecipe);
-
 		recipeTypeSelector.addEventListener("change", changeSource);
-		changeSource(recipeTypeSelector.value);
+		// changeSource(recipeTypeSelector.value);
 		functionTypeSelector.addEventListener("change", changeType);
-		changeType(functionTypeSelector.value);
+		// changeType(functionTypeSelector.value);
+		colourSchemeSelector.addEventListener("change", changeColours);
+		// changeColours(colourSchemeSelector.value);
 	}
 );
 fetch(`${location.protocol}//${location.host}/machineRecipes.json`).then(
@@ -70,6 +71,65 @@ fetch(`${location.protocol}//${location.host}/machineRecipes.json`).then(
 	}
 );
 
+function generateSideList() {
+	logBegin();
+	let sidebar;
+	if (aside.firstElementChild && aside.firstElementChild.tagName == "UL") {
+		sidebar = aside.firstElementChild;
+		[...sidebar.childNodes].forEach(child => {
+			child.remove();
+		});
+	} else {
+		sidebar = document.createElement("ul");
+		sidebar.addEventListener("click", selectRecipe);
+		aside.appendChild(sidebar);
+	}
+
+	let sortRecipes = new Array();
+	for (let recipe in getRecipes()) {
+		sortRecipes.push(recipe);
+	}
+	sortRecipes.sort();
+
+	sortRecipes.forEach(recipe => {
+		// window.requestIdleCallback(() => {
+		let entry = document.createElement("li");
+		entry.textContent = `${getRecipeNumber(recipe)} | ${isNaN(getRecipeCraftingTier(recipe)) ? "-" : getRecipeCraftingTier(recipe)} |   ${recipe}`;
+		entry.data = recipe;
+		let colours = recipeColours(recipe);
+		entry.style.backgroundColor = `rgba(${colours["red"]},${colours["green"]},${colours["blue"]},0.5)`;
+		sidebar.appendChild(entry);
+		// });
+	});
+}
+
+function runAsync(func) {
+	window.requestIdleCallback(() => {
+		func();
+	});
+}
+
+function recipeColours(recipe) {
+	switch (colourScheme) {
+		case colourSchemeList.ingredient:
+			return calcTierColour(totalItems, getRecipeNumber(recipe));
+		default:
+			return calcTierColour(getTotalCraftingTier(), getRecipeCraftingTier(recipe));
+	}
+}
+
+function changeColours(event) {
+	logBegin(event);
+	if (typeof event == "object") {
+		colourScheme = event.target.value;
+	} else {
+		colourScheme = event;
+	}
+	runAsync(reloadDisplay);
+	runAsync(generateSideList);
+	logEnd();
+}
+
 function changeType(event) {
 	logBegin("changeType", arguments);
 	if (typeof event == "object") {
@@ -77,17 +137,7 @@ function changeType(event) {
 	} else {
 		currentTypeMode = event;
 	}
-	v2resetDisplay();
-	switch (currentTypeMode) {
-		case typeModeList.manager:
-			displayRecipeManager();
-			break;
-		default:
-			if (typeof event == "object") {
-				selectRecipe(event);
-			}
-			break;
-	}
+	runAsync(reloadDisplay);
 	logEnd("changeType");
 }
 
@@ -98,18 +148,31 @@ function changeSource(event) {
 	} else {
 		currentRecipeMode = event;
 	}
+	calcTotal();
+	runAsync(reloadDisplay);
+	runAsync(generateSideList);
+	logEnd("changeSource");
+}
+
+function reloadDisplay() {
+	logBeginSub();
 	v2resetDisplay();
 	switch (currentTypeMode) {
 		case typeModeList.manager:
 			displayRecipeManager();
 			break;
 		default:
-			if (typeof event == "object") {
-				selectRecipe(event);
-			}
+			selectRecipe(event);
 			break;
 	}
-	logEnd("changeSource");
+	logEndSub();
+}
+
+function calcTotal() {
+	totalItems = 0;
+	for (let recipe in getRecipes()) {
+		totalItems++;
+	};
 }
 
 function clearDisplay() {
@@ -119,6 +182,7 @@ function clearDisplay() {
 }
 
 function calcTierColour(totalTiers, thisTier) {
+	logBeginSub(arguments);
 	totalTiers = Number.parseInt(totalTiers);
 	thisTier = Number.parseInt(thisTier);
 	const modifier = (thisTier + 1) / (totalTiers + 1);
@@ -139,12 +203,26 @@ function calcTierColour(totalTiers, thisTier) {
 		colours["red"] = thirds * 3 * modifier;
 	}
 
+	logEndSub();
 	return colours;
 }
 
-let allowedCalcs = 6;
+function calcNumbers() {
+	logBeginSub();
+	for (let recipe in getRecipes()) {
+		setRecipeNumber(recipe, totalItems);
+		totalItems++;
+	}
+	logEndSub();
+}
+
 function calcTiers() {
-	logBegin();
+	let allowedCalcs = 6;
+	_calcTiers(allowedCalcs);
+}
+
+function _calcTiers(allowedCalcs) {
+	logBeginSub();
 	allowedCalcs--;
 	let changed = 0;
 	for (let recipe in getRecipes()) {
@@ -170,28 +248,32 @@ function calcTiers() {
 		}
 
 		if (init != getRecipeCraftingTier(recipe)) {
-			changed++;
+			if (isNaN(init) && typeof init != "number") {
+				changed++;
+			}
 		}
 	}
 	console.info(`Recalculated ${changed} crafting tiers.`);
 	if (changed > 0 && allowedCalcs > 0) {
-		calcTiers();
+		calcTiers(allowedCalcs);
 	}
-	logEnd();
+	logEndSub();
 }
 
 function selectRecipe(event) {
 	logBegin(event);
 
-	if (/INPUT/.test(event.target.tagName)) {
-		if (!isNaN(outputQuantity.value)) {
-			currentQuantity = Number.parseInt(outputQuantity.value);
+	if (event && event.target) {
+		if (/INPUT/.test(event.target.tagName)) {
+			if (!isNaN(outputQuantity.value)) {
+				currentQuantity = Number.parseInt(outputQuantity.value);
+			}
 		}
-	}
-	if (/LI/.test(event.target.tagName)) {
-		let inputText = event.target.textContent;
-		if (isRecipe(inputText)) {
-			currentRecipe = inputText;
+		if (/LI/.test(event.target.tagName)) {
+			let inputText = event.target.data;
+			if (isRecipe(inputText)) {
+				currentRecipe = inputText;
+			}
 		}
 	}
 	if (currentRecipe && currentQuantity) {
@@ -237,7 +319,7 @@ function logBegin() {
 function logEnd() {
 	let stack = (new Error()).stack.match(stackRegEx);
 	let func = stack[1] || stack.pop();
-	console.warn(`[END]${func.split(/ |\./).pop()}`, JSON.stringify(arguments));
+	console.debug(`[END]${func.split(/ |\./).pop()}`, JSON.stringify(arguments));
 }
 function logBeginSub() {
 	let stack = (new Error()).stack.match(stackRegEx);
@@ -291,6 +373,12 @@ function getRecipeOptionEnabled(recipe, option) {
 }
 function setRecipeOptionEnabled(recipe, option, status) {
 	return localStorage.setItem(`${recipe}.${option}.Enabled`, status.toString());
+}
+function getRecipeNumber(recipe) {
+	return Number.parseInt(localStorage.getItem(`${recipe}.Number`));
+}
+function setRecipeNumber(recipe, num) {
+	return localStorage.setItem(`${recipe}.Number`, num);
 }
 
 function exploreRecipe(data, quantity) {
@@ -485,7 +573,7 @@ function v2FormatData(data, option, multiple) {
 	li.innerText = `Required Crafts: ${multiple}`;
 	ul.appendChild(li);
 
-	let colours = calcTierColour(getTotalCraftingTier(), getRecipeOptionCraftingTier(data, option));
+	let colours = recipeColours(data);
 	if (!getRecipeOptionEnabled(data, option)) {
 		td.style.textDecoration = "line-through wavy black";
 		td.style.backgroundColor = `rgba(${colours["red"]},${colours["green"]},${colours["blue"]},0.1)`;
