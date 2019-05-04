@@ -11,3 +11,6 @@
 [CSS] Replace inline-block with flexbox or grid.
 [SERVER] Dynamic rendering for some user agents: https://developers.google.com/search/docs/guides/dynamic-rendering
 [JS] scrolling searches for lists
+[JS] Lazy load recipes
+[JS] Modules
+[JS] Move data to indexdb
