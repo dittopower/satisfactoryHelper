@@ -20,6 +20,16 @@
         {
             "Harvest": 1,
             "Makes": 1
+        },
+        {
+            "Biomass": 5,
+            "Makes": 6,
+            "Alternative": true
+        },
+        {
+            "Wood": 1,
+            "Makes": 10,
+            "Alternative": true
         }
     ],
     "Caterium Ore": [
@@ -50,6 +60,11 @@
         {
             "Harvest": 1,
             "Makes": 1
+        },
+        {
+            "Raw Quartz": 4,
+            "Limestone": 2,
+            "Makes": 9
         }
     ],
     "Sulfur": [
@@ -159,13 +174,31 @@
             "Coal": 6,
             "Makes": 6,
             "Alternative": true
+        },
+        {
+            "Iron Ore": 6,
+            "Compacted Coal": 3,
+            "Makes": 6,
+            "Alternative": true
         }
     ],
-    "Aluminum Ingot": [],
+    "Aluminum Ingot": [
+        {
+            "Bauxite": 7,
+            "Silica": 6,
+            "Makes": 2
+        }
+    ],
     "Plastic": [
         {
             "Crude Oil": 4,
             "Makes": 3
+        },
+        {
+            "Fuel": 5,
+            "Rubber": 8,
+            "Makes": 9,
+            "Alternative": true
         }
     ],
     "Fuel": [
@@ -201,6 +234,11 @@
             "Iron Ingot": 2,
             "Makes": 12,
             "Alternative": true
+        },
+        {
+            "Steel Beam": 1,
+            "Makes": 36,
+            "Alternative": true
         }
     ],
     "Wire": [
@@ -235,12 +273,22 @@
         {
             "Alien Carapace": 1,
             "Makes": 100
+        },
+        {
+            "Alien Organs": 1,
+            "Makes": 100
         }
     ],
     "Concrete": [
         {
             "Limestone": 3,
             "Makes": 1
+        },
+        {
+            "Limestone": 4,
+            "Silica": 1,
+            "Makes": 3,
+            "Alternative": true
         }
     ],
     "Power Shard": [
@@ -265,7 +313,12 @@
         {
             "Wire": 3,
             "Rubber": 2,
-            "Makes": 5
+            "Makes": 10
+        },
+        {
+            "Quickwire": 4,
+            "Rubber": 2,
+            "Makes": 12
         }
     ],
     "Biofuel": [
@@ -301,7 +354,7 @@
     "Quickwire": [
         {
             "Caterium Ingot": 1,
-            "Makes": 9
+            "Makes": 4
         },
         {
             "Caterium Ingot": 1,
@@ -374,7 +427,7 @@
             "Makes": 1
         },
         {
-            "Quickwire": 25,
+            "Quickwire": 20,
             "Steel Pipe": 6,
             "Makes": 3,
             "Alternative": true
@@ -385,12 +438,18 @@
             "Rotor": 2,
             "Stator": 2,
             "Makes": 1
+        },
+        {
+            "Rotor": 2,
+            "Stator": 2,
+            "Crystal Oscillator": 1,
+            "Makes": 3
         }
     ],
     "Fabric": [
         {
             "Mycelia": 1,
-            "Leaves": 2,
+            "Biomass": 5,
             "Makes": 1
         }
     ],
@@ -408,7 +467,7 @@
         },
         {
             "Plastic": 12,
-            "Quickwire": 32,
+            "Quickwire": 30,
             "Makes": 3,
             "Alternative": true
         }
@@ -447,9 +506,15 @@
         },
         {
             "Circuit Board": 10,
-            "Quickwire": 112,
+            "Quickwire": 80,
             "Rubber": 48,
             "Makes": 3,
+            "Alternative": true
+        },
+        {
+            "Circuit Board": 2,
+            "Crystal Oscillator": 1,
+            "Makes": 1,
             "Alternative": true
         }
     ],
@@ -459,6 +524,13 @@
             "Cable": 10,
             "Plastic": 6,
             "Makes": 1
+        },
+        {
+            "Quickwire": 66,
+            "Silica": 48,
+            "Rubber": 18,
+            "Makes": 3,
+            "Alternative": true
         }
     ],
     "Supercomputer": [
@@ -475,6 +547,157 @@
             "Coal": 5,
             "Rubber": 2,
             "Fabric": 2,
+            "Makes": 1
+        }
+    ],
+    "Black Powder": [
+        {
+            "Coal": 1,
+            "Sulfur": 2,
+            "Makes": 1
+        },
+        {
+            "Compacted Coal": 1,
+            "Sulfur": 2,
+            "Makes": 4,
+            "Alternative": true
+        }
+    ],
+    "Compacted Coal": [
+        {
+            "Coal": 3,
+            "Sulfur": 3,
+            "Makes": 3
+        }
+    ],
+    "Turbofuel": [
+        {
+            "Fuel": 5,
+            "Compacted Coal": 4,
+            "Makes": 5
+        }
+    ],
+    "Aluminum Sheet": [
+        {
+            "Aluminum Ingot": 1,
+            "Makes": 1
+        }
+    ],
+    "Advanced Circuit Board": [
+        {
+            "Circuit Board": 999,
+            "Quickwire": 999,
+            "Makes": 999
+        }
+    ],
+    "Nobelisk": [
+        {
+            "Black Powder": 5,
+            "Steel Pipe": 5,
+            "Beacon": 1,
+            "Makes": 1
+        },
+        {
+            "Black Powder": 10,
+            "Steel Pipe": 10,
+            "Crystal Oscillator": 1,
+            "Makes": 3,
+            "Alternative": true
+        }
+    ],
+    "Cartridge": [
+        {
+            "Nobelisk": 1,
+            "Steel Pipe": 4,
+            "Makes": 4
+        }
+    ],
+    "Battery": [
+        {
+            "Aluminum Sheet": 8,
+            "Wire": 24,
+            "Sulfur": 20,
+            "Plastic": 9,
+            "Makes": 3
+        }
+    ],
+    "Heat Sink": [
+        {
+            "Aluminum Sheet": 4,
+            "Rubber": 10,
+            "Makes": 1
+        }
+    ],
+    "Turbo Motor": [
+        {
+            "Heat Sink": 4,
+            "Radio Control Unit": 2,
+            "Motor": 4,
+            "Rubber": 40,
+            "Makes": 1
+        }
+    ],
+    "Radio Control Unit": [
+        {
+            "Heat Sink": 4,
+            "Rubber": 24,
+            "Crystal Oscillator": 1,
+            "Computer": 1,
+            "Makes": 1
+        }
+    ],
+    "Beacon": [
+        {
+            "Iron Plate": 3,
+            "Iron Rod": 1,
+            "Wire": 15,
+            "Cable": 2,
+            "Makes": 1
+        },
+        {
+            "Steel Beam": 1,
+            "Steel Pipe": 4,
+            "Crystal Oscillator": 1,
+            "Makes": 5,
+            "Alternative": true
+        }
+    ],
+    "Medicinal Inhaler": [
+        {
+            "Bacon Agaric": 1,
+            "Paleberry": 2,
+            "Beryl Nut": 3,
+            "Mycelia": 5,
+            "Makes": 1
+        },
+        {
+            "Alien Organs": 3,
+            "Mycelia": 5,
+            "Makes": 1
+        }
+    ],
+    "Paleberry": [
+        {
+            "Harvest": 1,
+            "Makes": 1
+        }
+    ],
+    "Beryl Nut": [
+        {
+            "Harvest": 1,
+            "Makes": 1
+        }
+    ],
+    "S.A.M. Ingot": [
+        {
+            "S.A.M. Ore": 6,
+            "Makes": 1
+        }
+    ],
+    "Quantum Computer": [],
+    "Nuclear Fuel Rods": [
+        {
+            "Uranium": 50,
             "Makes": 1
         }
     ]
