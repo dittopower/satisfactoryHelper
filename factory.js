@@ -41,6 +41,9 @@ function init() {
 					let child = document.createElement("option");
 					child.value = value;
 					child.text = value;
+					if (value === getCurrentDataSet()){
+						child.selected = true;
+					}
 					recipeTypeSelector.appendChild(child);
 				}
 			}
@@ -48,11 +51,8 @@ function init() {
 
 		outputQuantity.addEventListener("change", selectRecipe);
 		recipeTypeSelector.addEventListener("change", changeSource);
-		// changeSource(recipeTypeSelector.value);
 		functionTypeSelector.addEventListener("change", changeType);
-		// changeType(functionTypeSelector.value);
 		colourSchemeSelector.addEventListener("change", changeColours);
-		// changeColours(colourSchemeSelector.value);
 	})
 }
 
@@ -128,9 +128,6 @@ function changeSource(event) {
 		} else {
 			setCurrentDataSet(event);
 		}
-		// calcNumbers();
-		// runAsync(reloadDisplay);
-		// runAsync(generateSideList);
 	} catch (e) {
 		debugger
 	}
