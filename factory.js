@@ -7,11 +7,10 @@ const colourSchemeSelector = document.getElementById("colourScheme");
 const article = document.getElementsByTagName("article")[0];
 const table = document.getElementsByTagName("table")[0];
 let currentQuantity = 1;
-let currentTypeMode = functionTypeSelector.value;
 let colourScheme = colourSchemeSelector.value;
 const typeModeList = {
-	"new": "v2",
-	"manager": "manager"
+	"viewer": "explore",
+	"manager": "manage"
 };
 const colourSchemeList = {
 	"crafting": "crafting",
@@ -41,16 +40,30 @@ function init() {
 					let child = document.createElement("option");
 					child.value = value;
 					child.text = value;
-					if (value === getCurrentDataSet()){
+					if (value === getCurrentDataSet()) {
 						child.selected = true;
 					}
 					recipeTypeSelector.appendChild(child);
 				}
 			}
+			recipeTypeSelector.addEventListener("change", changeSource);
 		}
 
+		for (let value in typeModeList) {
+			let child = document.createElement("option");
+			child.value = typeModeList[value];
+			child.text = typeModeList[value];
+			if (typeModeList[value] === getCurrentViewMode()) {
+				child.selected = true;
+			}
+			functionTypeSelector.appendChild(child);
+		}
+		if (!getCurrentViewMode()) {
+			setCurrentViewMode(functionTypeSelector.value);
+		}
+
+
 		outputQuantity.addEventListener("change", selectRecipe);
-		recipeTypeSelector.addEventListener("change", changeSource);
 		functionTypeSelector.addEventListener("change", changeType);
 		colourSchemeSelector.addEventListener("change", changeColours);
 	})
@@ -112,9 +125,9 @@ function changeColours(event) {
 function changeType(event) {
 	logBegin("changeType", arguments);
 	if (typeof event == "object") {
-		currentTypeMode = event.target.value;
+		setCurrentViewMode(event.target.value);
 	} else {
-		currentTypeMode = event;
+		setCurrentViewMode(event);
 	}
 	runAsync(reloadDisplay);
 	logEnd("changeType");
@@ -137,7 +150,7 @@ function changeSource(event) {
 function reloadDisplay() {
 	logBeginSub();
 	v2resetDisplay();
-	switch (currentTypeMode) {
+	switch (getCurrentViewMode()) {
 		case typeModeList.manager:
 			displayRecipeManager();
 			break;
@@ -226,8 +239,8 @@ function selectRecipe(event) {
 	}
 	if (getCurrentRecipe() && currentQuantity) {
 		window.requestIdleCallback(() => {
-			console.info(`Start Mode ${currentTypeMode} Making ${getCurrentRecipe()}`);
-			switch (currentTypeMode) {
+			console.info(`Start Mode ${getCurrentViewMode()} Making ${getCurrentRecipe()}`);
+			switch (getCurrentViewMode()) {
 				default:
 					v2resetDisplay();
 					buildRecipeView(getCurrentRecipe(), currentQuantity);

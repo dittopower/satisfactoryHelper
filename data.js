@@ -102,3 +102,9 @@ function getCurrentRecipe() {
 function setCurrentRecipe(recipe) {
     return localStorage.setItem(`CurrentRecipe`, recipe);
 }
+function getCurrentViewMode() {
+    return localStorage.getItem(`CurrentViewMode`);
+}
+function setCurrentViewMode(mode) {
+    return localStorage.setItem(`CurrentViewMode`, mode);
+}
