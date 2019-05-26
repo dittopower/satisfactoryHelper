@@ -6,7 +6,6 @@ const recipeTypeSelector = document.getElementById("recipeType");
 const colourSchemeSelector = document.getElementById("colourScheme");
 const article = document.getElementsByTagName("article")[0];
 const table = document.getElementsByTagName("table")[0];
-let currentQuantity = 1;
 let colourScheme = colourSchemeSelector.value;
 const typeModeList = {
 	"viewer": "explore",
@@ -61,10 +60,11 @@ function init() {
 		if (!getCurrentViewMode()) {
 			setCurrentViewMode(functionTypeSelector.value);
 		}
-
-
-		outputQuantity.addEventListener("change", selectRecipe);
 		functionTypeSelector.addEventListener("change", changeType);
+
+		outputQuantity.value = getCurrentQuanity();
+		outputQuantity.addEventListener("change", selectRecipe);
+
 		colourSchemeSelector.addEventListener("change", changeColours);
 	})
 }
@@ -227,7 +227,7 @@ function selectRecipe(event) {
 	if (event && event.target) {
 		if (/INPUT/.test(event.target.tagName)) {
 			if (!isNaN(outputQuantity.value)) {
-				currentQuantity = Number.parseInt(outputQuantity.value);
+				setCurrentQuanity(Number.parseInt(outputQuantity.value));
 			}
 		}
 		if (/LI/.test(event.target.tagName)) {
@@ -237,13 +237,13 @@ function selectRecipe(event) {
 			}
 		}
 	}
-	if (getCurrentRecipe() && currentQuantity) {
+	if (getCurrentRecipe() && getCurrentQuanity()) {
 		window.requestIdleCallback(() => {
 			console.info(`Start Mode ${getCurrentViewMode()} Making ${getCurrentRecipe()}`);
 			switch (getCurrentViewMode()) {
 				default:
 					v2resetDisplay();
-					buildRecipeView(getCurrentRecipe(), currentQuantity);
+					buildRecipeView(getCurrentRecipe(), getCurrentQuanity());
 					break;
 			}
 		});

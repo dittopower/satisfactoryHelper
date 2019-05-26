@@ -108,3 +108,9 @@ function getCurrentViewMode() {
 function setCurrentViewMode(mode) {
     return localStorage.setItem(`CurrentViewMode`, mode);
 }
+function getCurrentQuanity() {
+    return Number.parseInt(localStorage.getItem(`CurrentQuanity`)) || 1;
+}
+function setCurrentQuanity(num) {
+    return localStorage.setItem(`CurrentQuanity`, num);
+}
