@@ -1,57 +1,58 @@
-let recipes = {};
-let machineRecipes = {};
+let postLoadFunc;
+let dataSets = { "recipes": false, "machineRecipes": false };
+let data = [];
 
-function loadData() {
-    return Promise.all([
-        fetch(`${location.protocol}//${location.host}/recipes.json`).then(
+function loadData(postLoad) {
+    postLoadFunc = postLoad;
+    let currentDataSet = getCurrentDataSet();
+    let fetchArray = new Array();
+    for (let entry in dataSets) {
+        fetchArray.push(fetch(`${location.protocol}//${location.host}/${entry}.json`).then(
             (resp) => {
                 console.info(resp);
                 return resp.json();
             },
             (error) => {
                 console.error(error);
-                alert("Failed to load recipes.");
+                alert(`Failed to load ${entry}.`);
             }
         ).then(
             (packageJson) => {
-                recipes = packageJson;
-                calcTiers();
-                calcNumbers();
-                calcTotal();
+                data[entry] = packageJson;
+                dataSets[entry] = true;
+                if (!currentDataSet) {
+                    currentDataSet = entry;
+                }
+            }, (e) => {
+                console.error(`Failed to load '${entry}', hiding failed set..`, e);
+                dataSets[entry] = false;
+            }
+        ));
+    }
+    return Promise.all(fetchArray).then(() => {
+        let tryUpdate = setCurrentDataSet(currentDataSet);
+        return tryUpdate ? tryUpdate : postLoadFunc(dataSets);
+    });
+}
 
-                runAsync(generateSideList);
-
-                outputQuantity.addEventListener("change", selectRecipe);
-                recipeTypeSelector.addEventListener("change", changeSource);
-                // changeSource(recipeTypeSelector.value);
-                functionTypeSelector.addEventListener("change", changeType);
-                // changeType(functionTypeSelector.value);
-                colourSchemeSelector.addEventListener("change", changeColours);
-                // changeColours(colourSchemeSelector.value);
-            }
-        ),
-        fetch(`${location.protocol}//${location.host}/machineRecipes.json`).then(
-            (resp) => {
-                console.info(resp);
-                return resp.json();
-            },
-            (error) => {
-                console.error(error);
-                alert("Failed to load machineRecipes.");
-            }
-        ).then(
-            (packageJson) => {
-                machineRecipes = packageJson;
-            }
-        )
-    ]);
+function setCurrentDataSet(name) {
+    if (dataSets[name]) {
+        currentDataSet = name;
+    } else {
+        throw error(`'${name}' is not a valid data set.`);
+    }
+    if (name != getCurrentDataSet()) {
+        localStorage.setItem(`CurrentDataSet`, name);
+        return postLoadFunc(dataSets);
+    }
+    return false;
+}
+function getCurrentDataSet() {
+    return localStorage.getItem(`CurrentDataSet`);
 }
 
 function getRecipes() {
-    if (currentRecipeMode == recipeModeList.machine) {
-        return machineRecipes;
-    }
-    return recipes;
+    return data[currentDataSet];
 }
 function getRecipe(data) {
     return getRecipes()[data];
@@ -94,4 +95,10 @@ function getRecipeNumber(recipe) {
 }
 function setRecipeNumber(recipe, num) {
     return localStorage.setItem(`${recipe}.Number`, num);
+}
+function getCurrentRecipe() {
+    return localStorage.getItem(`CurrentRecipe`);
+}
+function setCurrentRecipe(recipe) {
+    return localStorage.setItem(`CurrentRecipe`, recipe);
 }

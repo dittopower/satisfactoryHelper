@@ -127,3 +127,7 @@ input.disabler {
     height: 4ch;
     background-color: #f44336;
 }
+
+#recipeType, #recipeType option {
+    text-transform: capitalize;
+}

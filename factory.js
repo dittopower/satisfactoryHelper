@@ -6,18 +6,12 @@ const recipeTypeSelector = document.getElementById("recipeType");
 const colourSchemeSelector = document.getElementById("colourScheme");
 const article = document.getElementsByTagName("article")[0];
 const table = document.getElementsByTagName("table")[0];
-let currentRecipe = undefined;
 let currentQuantity = 1;
 let currentTypeMode = functionTypeSelector.value;
-let currentRecipeMode = recipeTypeSelector.value;
 let colourScheme = colourSchemeSelector.value;
 const typeModeList = {
 	"new": "v2",
 	"manager": "manager"
-};
-const recipeModeList = {
-	"normal": "normal",
-	"machine": "machine"
 };
 const colourSchemeList = {
 	"crafting": "crafting",
@@ -33,12 +27,24 @@ let totalItems = 0;
 window.addEventListener('load', init, { once: true });
 
 function init() {
-	loadData().then(() => {
+	loadData((availableDataSets) => {
 		calcTiers();
 		calcNumbers();
-		calcTotal();
-
 		runAsync(generateSideList);
+		runAsync(reloadDisplay);
+		return availableDataSets;
+
+	}).then((availableDataSets) => {
+		if (availableDataSets) {
+			for (let value in availableDataSets) {
+				if (availableDataSets[value]) {
+					let child = document.createElement("option");
+					child.value = value;
+					child.text = value;
+					recipeTypeSelector.appendChild(child);
+				}
+			}
+		}
 
 		outputQuantity.addEventListener("change", selectRecipe);
 		recipeTypeSelector.addEventListener("change", changeSource);
@@ -116,14 +122,18 @@ function changeType(event) {
 
 function changeSource(event) {
 	logBegin("changeSource", arguments);
-	if (typeof event == "object") {
-		currentRecipeMode = event.target.value;
-	} else {
-		currentRecipeMode = event;
+	try {
+		if (typeof event == "object") {
+			setCurrentDataSet(event.target.value);
+		} else {
+			setCurrentDataSet(event);
+		}
+		// calcNumbers();
+		// runAsync(reloadDisplay);
+		// runAsync(generateSideList);
+	} catch (e) {
+		debugger
 	}
-	calcTotal();
-	runAsync(reloadDisplay);
-	runAsync(generateSideList);
 	logEnd("changeSource");
 }
 
@@ -141,13 +151,6 @@ function reloadDisplay() {
 	logEndSub();
 }
 
-function calcTotal() {
-	totalItems = 0;
-	for (let recipe in getRecipes()) {
-		totalItems++;
-	};
-}
-
 function clearDisplay() {
 	[...table.children].forEach((child) => {
 		child.remove();
@@ -155,6 +158,7 @@ function clearDisplay() {
 }
 
 function calcNumbers() {
+	totalItems = 0;
 	logBeginSub();
 	for (let recipe in getRecipes()) {
 		setRecipeNumber(recipe, totalItems);
@@ -219,17 +223,17 @@ function selectRecipe(event) {
 		if (/LI/.test(event.target.tagName)) {
 			let inputText = event.target.data;
 			if (isRecipe(inputText)) {
-				currentRecipe = inputText;
+				setCurrentRecipe(inputText);
 			}
 		}
 	}
-	if (currentRecipe && currentQuantity) {
+	if (getCurrentRecipe() && currentQuantity) {
 		window.requestIdleCallback(() => {
-			console.info(`Start Mode ${currentTypeMode} Making ${currentRecipe}`);
+			console.info(`Start Mode ${currentTypeMode} Making ${getCurrentRecipe()}`);
 			switch (currentTypeMode) {
 				default:
 					v2resetDisplay();
-					buildRecipeView(currentRecipe, currentQuantity);
+					buildRecipeView(getCurrentRecipe(), currentQuantity);
 					break;
 			}
 		});
