@@ -1,5 +1,4 @@
-let recipes = {};
-let machineRecipes = {};
+
 const aside = document.getElementsByTagName("aside")[0];
 const outputQuantity = document.getElementById("quantity");
 const functionTypeSelector = document.getElementById("functionType");
@@ -31,18 +30,10 @@ let trackingColumns = [];
 let oddRow = true;
 let totalItems = 0;
 
-fetch(`${location.protocol}//${location.host}/recipes.json`).then(
-	(resp) => {
-		console.info(resp);
-		return resp.json();
-	},
-	(error) => {
-		console.error(error);
-		alert("Failed to load recipes.");
-	}
-).then(
-	(packageJson) => {
-		recipes = packageJson;
+window.addEventListener('load', init, { once: true });
+
+function init() {
+	loadData().then(() => {
 		calcTiers();
 		calcNumbers();
 		calcTotal();
@@ -56,22 +47,8 @@ fetch(`${location.protocol}//${location.host}/recipes.json`).then(
 		// changeType(functionTypeSelector.value);
 		colourSchemeSelector.addEventListener("change", changeColours);
 		// changeColours(colourSchemeSelector.value);
-	}
-);
-fetch(`${location.protocol}//${location.host}/machineRecipes.json`).then(
-	(resp) => {
-		console.info(resp);
-		return resp.json();
-	},
-	(error) => {
-		console.error(error);
-		alert("Failed to load machineRecipes.");
-	}
-).then(
-	(packageJson) => {
-		machineRecipes = packageJson;
-	}
-);
+	})
+}
 
 function generateSideList() {
 	logBegin();
@@ -102,12 +79,6 @@ function generateSideList() {
 		entry.style.backgroundColor = `rgba(${colours["red"]},${colours["green"]},${colours["blue"]},0.6)`;
 		sidebar.appendChild(entry);
 		// });
-	});
-}
-
-function runAsync(func) {
-	window.requestIdleCallback(() => {
-		func();
 	});
 }
 
@@ -181,68 +152,6 @@ function clearDisplay() {
 	[...table.children].forEach((child) => {
 		child.remove();
 	})
-}
-
-function minMax(value, min, max) {
-	return Math.max( //Value should not be smaller than min
-		min,
-		Math.min(max, value) //Value should not be larger than max
-	);
-}
-
-function minMaxRGB(value) {
-	return minMax(value, 0, 200);
-}
-
-
-function percentToColour(percent) {
-	// percent as a decimal i.e. 0.5 == 50%
-
-	const max = 256;
-	const total = max ** 3; // 16777216 possible colour combinations
-	const square = max ** 2; // 65536 number of possibilities for the other colours per value of colour X
-	const value = Math.round(total * percent); // Percentage's combination
-
-	let red = Math.trunc(value / square) % 256; // mod by 256 to ensure our max value is 255 (not 256 or higher)
-	let green = Math.trunc(value / square % 1 * max) % 256;
-	let blue = Math.round(value / square % (1 / max) * square) % 256;
-
-	return [red, green, blue];
-}
-
-function calcTierColour(totalTiers, thisTier) {
-	logBeginSub(arguments);
-	totalTiers = Number.parseInt(totalTiers);
-	thisTier = Number.parseInt(thisTier);
-	const colours = new Array();
-
-	const modifier = thisTier / totalTiers;
-
-	// let hex = value.toString(16);
-	// colours["red"] = +("0x" + hex.substr(0, hex.length / 3));
-	// colours["green"] = +("0x" + hex.substr(hex.length / 3, hex.length / 3));
-	// colours["blue"] = +("0x" + hex.substr(hex.length / 3 * 2, hex.length / 3));
-	let temp = percentToColour(modifier);
-	switch (colourScheme) {
-		case colourSchemeList.ingredientG:
-			colours["blue"] = temp[2];
-			colours["red"] = temp[1];
-			colours["green"] = temp[0];
-			break;
-		case colourSchemeList.ingredientR:
-			colours["red"] = temp[2];
-			colours["green"] = temp[1];
-			colours["blue"] = temp[0];
-			break;
-		default:
-			colours["blue"] = temp[2];
-			colours["green"] = temp[1];
-			colours["red"] = temp[0];
-			break;
-	}
-
-	logEndSub(colours);
-	return colours;
 }
 
 function calcNumbers() {
@@ -326,97 +235,6 @@ function selectRecipe(event) {
 		});
 	}
 	logEnd();
-}
-
-function jsonAddProperty(property, to, from) {
-	if (to[property]) {
-		to[property] += from[property]
-	} else {
-		to[property] = from[property];
-	}
-	return to;
-}
-function jsonAdd(to, from) {
-	for (let prop in from) {
-		if (to[prop]) {
-			to[prop] += from[prop];
-		} else {
-			to[prop] = from[prop];
-		}
-	}
-	return to;
-}
-
-const stackRegEx = /at (?![a-z]+:\/\/)(\S+)/g
-// const stackRegEx = /at (\S+)/g
-function logBegin() {
-	let stack = (new Error()).stack.match(stackRegEx);
-	let func = stack[1] || stack.pop();
-	console.warn(`[BEGIN]${func.split(/ |\./).pop()}`, JSON.stringify(arguments));
-}
-function logEnd() {
-	let stack = (new Error()).stack.match(stackRegEx);
-	let func = stack[1] || stack.pop();
-	console.debug(`[END]${func.split(/ |\./).pop()}`, JSON.stringify(arguments));
-}
-function logBeginSub() {
-	let stack = (new Error()).stack.match(stackRegEx);
-	let func = stack[1] || stack.pop();
-	console.debug(`	{START}${func.split(/ |\./).pop()}`, JSON.stringify(arguments));
-}
-function logEndSub() {
-	let stack = (new Error()).stack.match(stackRegEx);
-	let func = stack[1] || stack.pop();
-	console.debug(`	{FINISH}${func.split(/ |\./).pop()}`, JSON.stringify(arguments));
-}
-
-function getRecipes() {
-	if (currentRecipeMode == recipeModeList.machine) {
-		return machineRecipes;
-	}
-	return recipes;
-}
-function getRecipe(data) {
-	return getRecipes()[data];
-}
-function getRecipeOption(data, option) {
-	return getRecipe(data)[option];
-}
-function isRecipe(data) {
-	return !!getRecipe(data);
-}
-function isRecipeOption(data, option) {
-	return !!getRecipeOption(data, option);
-}
-function getTotalCraftingTier() {
-	return Number.parseInt(localStorage.getItem(`CraftingTier`)) || 0;
-}
-function setTotalCraftingTier(tier) {
-	return localStorage.setItem(`CraftingTier`, tier);
-}
-function getRecipeCraftingTier(data) {
-	return Number.parseInt(localStorage.getItem(`${data}.CraftingTier`));
-}
-function setRecipeCraftingTier(data, tier) {
-	return localStorage.setItem(`${data}.CraftingTier`, tier);
-}
-function getRecipeOptionCraftingTier(data, option) {
-	return Number.parseInt(localStorage.getItem(`${data}.${option}.CraftingTier`));
-}
-function setRecipeOptionCraftingTier(data, option, tier) {
-	return localStorage.setItem(`${data}.${option}.CraftingTier`, tier);
-}
-function getRecipeOptionEnabled(recipe, option) {
-	return false.toString() != localStorage.getItem(`${recipe}.${option}.Enabled`);
-}
-function setRecipeOptionEnabled(recipe, option, status) {
-	return localStorage.setItem(`${recipe}.${option}.Enabled`, status.toString());
-}
-function getRecipeNumber(recipe) {
-	return Number.parseInt(localStorage.getItem(`${recipe}.Number`));
-}
-function setRecipeNumber(recipe, num) {
-	return localStorage.setItem(`${recipe}.Number`, num);
 }
 
 function exploreRecipe(data, quantity) {
