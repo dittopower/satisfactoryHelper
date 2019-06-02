@@ -1,24 +1,32 @@
 const stackRegEx = /at (?![a-z]+:\/\/)(\S+)/g
 // const stackRegEx = /at (\S+)/g
 function logBegin() {
-    let stack = (new Error()).stack.match(stackRegEx);
-    let func = stack[1] || stack.pop();
-    console.warn(`[BEGIN]${func.split(/ |\./).pop()}`, JSON.stringify(arguments));
+    try {
+        let stack = (new Error()).stack.match(stackRegEx);
+        let func = stack[1] || stack.pop();
+        console.debug(`[BEGIN]${func.split(/ |\./).pop()}`, JSON.stringify(arguments));
+    } catch (e) { }
 }
 function logEnd() {
-    let stack = (new Error()).stack.match(stackRegEx);
-    let func = stack[1] || stack.pop();
-    console.debug(`[END]${func.split(/ |\./).pop()}`, JSON.stringify(arguments));
+    try {
+        let stack = (new Error()).stack.match(stackRegEx);
+        let func = stack[1] || stack.pop();
+        console.debug(`[END]${func.split(/ |\./).pop()}`, JSON.stringify(arguments));
+    } catch (e) { }
 }
 function logBeginSub() {
-    let stack = (new Error()).stack.match(stackRegEx);
-    let func = stack[1] || stack.pop();
-    console.debug(`	{START}${func.split(/ |\./).pop()}`, JSON.stringify(arguments));
+    try {
+        let stack = (new Error()).stack.match(stackRegEx);
+        let func = stack[1] || stack.pop();
+        console.debug(`	{START}${func.split(/ |\./).pop()}`, JSON.stringify(arguments));
+    } catch (e) { }
 }
 function logEndSub() {
-    let stack = (new Error()).stack.match(stackRegEx);
-    let func = stack[1] || stack.pop();
-    console.debug(`	{FINISH}${func.split(/ |\./).pop()}`, JSON.stringify(arguments));
+    try {
+        let stack = (new Error()).stack.match(stackRegEx);
+        let func = stack[1] || stack.pop();
+        console.debug(`	{FINISH}${func.split(/ |\./).pop()}`, JSON.stringify(arguments));
+    } catch (e) { }
 }
 
 function jsonAddProperty(property, to, from) {
@@ -48,7 +56,7 @@ function minMax(value, min, max) {
 }
 
 function runAsync(func) {
-	window.requestIdleCallback(() => {
-		func();
-	});
+    window.requestIdleCallback(() => {
+        func();
+    });
 }

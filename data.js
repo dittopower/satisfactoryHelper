@@ -1,20 +1,19 @@
-let postLoadFunc;
+let postLoadFunc = () => { };
 let dataSets = { "recipes": false, "machineRecipes": false };
 let data = [];
+let ready = false;
+let urlQueryParams = new URLSearchParams(window.location.search);
 
 function loadData(postLoad) {
-    postLoadFunc = postLoad;
     let currentDataSet = getCurrentDataSet();
     let fetchArray = new Array();
     for (let entry in dataSets) {
         fetchArray.push(fetch(`${location.protocol}//${location.host}/${entry}.json`).then(
             (resp) => {
-                console.info(resp);
                 return resp.json();
             },
             (error) => {
-                console.error(error);
-                alert(`Failed to load ${entry}.`);
+                console.error(`Failed to load ${entry}.`, error);
             }
         ).then(
             (packageJson) => {
@@ -30,19 +29,76 @@ function loadData(postLoad) {
         ));
     }
     return Promise.all(fetchArray).then(() => {
-        let tryUpdate = setCurrentDataSet(currentDataSet);
-        return tryUpdate ? tryUpdate : postLoadFunc(dataSets);
+        // Load shared link from url get params
+        try {
+            if (urlQueryParams.has("src")) {
+                setCurrentDataSet(urlQueryParams.get("src"));
+            }
+            if (urlQueryParams.has("quantity")) {
+                setCurrentQuanity(urlQueryParams.get("quantity"));
+            }
+            if (urlQueryParams.has("item")) {
+                setCurrentRecipe(urlQueryParams.get("item"));
+            }
+        } catch (e) {
+            console.error(`Error handling Query string.`, e);
+        }
+        ready=true;
+    }).then(() => {
+        if (!currentDataSet) {
+            setCurrentDataSet(currentDataSet);
+        }
+        postLoadFunc = postLoad;
+        return postLoadFunc(dataSets);
     });
 }
 
-function setCurrentDataSet(name) {
-    if (dataSets[name]) {
-        currentDataSet = name;
+function updateShareData() {
+    changeShareData();
+}
+function setShareData() {
+    changeShareData('replace');
+}
+function changeShareData(action) {
+    if (!ready){
+        return;
+    }
+    let state = {};
+
+    let item = getCurrentRecipe();
+    if (item) {
+        state.item = item;
+        urlQueryParams.set("item", item);
+    }
+
+    let quantity = getCurrentQuanity();
+    if (quantity) {
+        state.quantity = quantity;
+        urlQueryParams.set("quantity", quantity);
+    }
+
+    let src = getCurrentDataSet();
+    if (src) {
+        state.src = src;
+        urlQueryParams.set("src", src);
+    }
+
+    let title = document.title;
+    let url = `?${urlQueryParams.toString()}`;
+    if (action == 'replace') {
+        window.history.replaceState(state, title, url);
     } else {
+        window.history.pushState(state, title, url);
+    }
+}
+
+function setCurrentDataSet(name) {
+    if (!dataSets[name]) {
         throw error(`'${name}' is not a valid data set.`);
     }
     if (name != getCurrentDataSet()) {
         localStorage.setItem(`CurrentDataSet`, name);
+        updateShareData();
         return postLoadFunc(dataSets);
     }
     return false;
@@ -52,7 +108,7 @@ function getCurrentDataSet() {
 }
 
 function getRecipes() {
-    return data[currentDataSet];
+    return data[getCurrentDataSet()];
 }
 function getRecipe(data) {
     return getRecipes()[data];
@@ -100,7 +156,8 @@ function getCurrentRecipe() {
     return localStorage.getItem(`CurrentRecipe`);
 }
 function setCurrentRecipe(recipe) {
-    return localStorage.setItem(`CurrentRecipe`, recipe);
+    localStorage.setItem(`CurrentRecipe`, recipe);
+    updateShareData();
 }
 function getCurrentViewMode() {
     return localStorage.getItem(`CurrentViewMode`);
@@ -112,5 +169,6 @@ function getCurrentQuanity() {
     return Number.parseInt(localStorage.getItem(`CurrentQuanity`)) || 1;
 }
 function setCurrentQuanity(num) {
-    return localStorage.setItem(`CurrentQuanity`, num);
+    localStorage.setItem(`CurrentQuanity`, num);
+    setShareData();
 }
