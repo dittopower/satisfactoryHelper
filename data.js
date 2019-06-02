@@ -34,6 +34,9 @@ function loadData(postLoad) {
             if (urlQueryParams.has("src")) {
                 setCurrentDataSet(urlQueryParams.get("src"));
             }
+            if(urlQueryParams.has("view")){
+                setCurrentViewMode(urlQueryParams.get("view"));
+            }
             if (urlQueryParams.has("quantity")) {
                 setCurrentQuanity(urlQueryParams.get("quantity"));
             }
@@ -81,6 +84,12 @@ function changeShareData(action) {
     if (src) {
         state.src = src;
         urlQueryParams.set("src", src);
+    }
+
+    let view = getCurrentViewMode();
+    if(view){
+        state.view = view;
+        urlQueryParams.set("view",view);
     }
 
     let title = document.title;
@@ -163,7 +172,8 @@ function getCurrentViewMode() {
     return localStorage.getItem(`CurrentViewMode`);
 }
 function setCurrentViewMode(mode) {
-    return localStorage.setItem(`CurrentViewMode`, mode);
+    localStorage.setItem(`CurrentViewMode`, mode);
+    updateShareData();
 }
 function getCurrentQuanity() {
     return Number.parseInt(localStorage.getItem(`CurrentQuanity`)) || 1;
