@@ -2,6 +2,7 @@ let postLoadFunc = () => { };
 let dataSets = { "recipes": false, "machineRecipes": false };
 let data = [];
 let ready = false;
+let history = true;
 let urlQueryParams = new URLSearchParams(window.location.search);
 
 function loadData(postLoad) {
@@ -34,7 +35,7 @@ function loadData(postLoad) {
             if (urlQueryParams.has("src")) {
                 setCurrentDataSet(urlQueryParams.get("src"));
             }
-            if(urlQueryParams.has("view")){
+            if (urlQueryParams.has("view")) {
                 setCurrentViewMode(urlQueryParams.get("view"));
             }
             if (urlQueryParams.has("quantity")) {
@@ -46,7 +47,8 @@ function loadData(postLoad) {
         } catch (e) {
             console.error(`Error handling Query string.`, e);
         }
-        ready=true;
+        ready = true;
+        addEventListener("popstate", loadState)
     }).then(() => {
         if (!currentDataSet) {
             setCurrentDataSet(currentDataSet);
@@ -56,6 +58,25 @@ function loadData(postLoad) {
     });
 }
 
+function loadState() {
+    let state = window.history.state;
+    history = false;
+    if (state.src && state.src != getCurrentDataSet()) {
+        setCurrentDataSet(state.src);
+    }
+    if (state.view && state.view != getCurrentViewMode()) {
+        setCurrentViewMode(state.view);
+    }
+    if (state.quantity && state.quantity != getCurrentQuanity()) {
+        setCurrentQuanity(state.quantity);
+    }
+    if (state.item && state.item != getCurrentRecipe()) {
+        setCurrentRecipe(state.item);
+    }
+    history = true;
+    postLoadFunc();
+}
+
 function updateShareData() {
     changeShareData();
 }
@@ -63,7 +84,7 @@ function setShareData() {
     changeShareData('replace');
 }
 function changeShareData(action) {
-    if (!ready){
+    if (!ready) {
         return;
     }
     let state = {};
@@ -87,17 +108,19 @@ function changeShareData(action) {
     }
 
     let view = getCurrentViewMode();
-    if(view){
+    if (view) {
         state.view = view;
-        urlQueryParams.set("view",view);
+        urlQueryParams.set("view", view);
     }
 
     let title = document.title;
     let url = `?${urlQueryParams.toString()}`;
-    if (action == 'replace') {
-        window.history.replaceState(state, title, url);
-    } else {
-        window.history.pushState(state, title, url);
+    if (history) {
+        if (action == 'replace') {
+            window.history.replaceState(state, title, url);
+        } else {
+            window.history.pushState(state, title, url);
+        }
     }
 }
 
@@ -108,7 +131,7 @@ function setCurrentDataSet(name) {
     if (name != getCurrentDataSet()) {
         localStorage.setItem(`CurrentDataSet`, name);
         updateShareData();
-        return postLoadFunc(dataSets);
+        return postLoadFunc();
     }
     return false;
 }

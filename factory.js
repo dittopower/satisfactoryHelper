@@ -30,9 +30,7 @@ function init() {
 		calcNumbers();
 		runAsync(generateSideList);
 		runAsync(reloadDisplay);
-		return availableDataSets;
 
-	}).then((availableDataSets) => {
 		if (availableDataSets) {
 			for (let value in availableDataSets) {
 				if (availableDataSets[value]) {
@@ -46,26 +44,37 @@ function init() {
 				}
 			}
 			recipeTypeSelector.addEventListener("change", changeSource);
-		}
 
-		for (let value in typeModeList) {
-			let child = document.createElement("option");
-			child.value = typeModeList[value];
-			child.text = typeModeList[value];
-			if (typeModeList[value] === getCurrentViewMode()) {
-				child.selected = true;
+			for (let value in typeModeList) {
+				let child = document.createElement("option");
+				child.value = typeModeList[value];
+				child.text = typeModeList[value];
+				if (typeModeList[value] === getCurrentViewMode()) {
+					child.selected = true;
+				}
+				functionTypeSelector.appendChild(child);
 			}
-			functionTypeSelector.appendChild(child);
-		}
-		if (!getCurrentViewMode()) {
-			setCurrentViewMode(functionTypeSelector.value);
-		}
-		functionTypeSelector.addEventListener("change", changeType);
+			if (!getCurrentViewMode()) {
+				setCurrentViewMode(functionTypeSelector.value);
+			}
+			functionTypeSelector.addEventListener("change", changeType);
 
+			outputQuantity.addEventListener("change", selectRecipe);
+			colourSchemeSelector.addEventListener("change", changeColours);
+		}
+
+
+		for (let child in recipeTypeSelector.children) {
+			if (recipeTypeSelector.children[child].value === getCurrentDataSet()) {
+				recipeTypeSelector.children[child].selected = true;
+			}
+		}
+		for (let child in functionTypeSelector.children) {
+			if (functionTypeSelector.children[child].value === getCurrentViewMode()) {
+				functionTypeSelector.children[child].selected = true;
+			}
+		}
 		outputQuantity.value = getCurrentQuanity();
-		outputQuantity.addEventListener("change", selectRecipe);
-
-		colourSchemeSelector.addEventListener("change", changeColours);
 	})
 }
 
