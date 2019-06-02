@@ -50,7 +50,7 @@ function loadData(postLoad) {
         ready = true;
         addEventListener("popstate", loadState)
     }).then(() => {
-        if (!currentDataSet) {
+        if (currentDataSet) {
             setCurrentDataSet(currentDataSet);
         }
         postLoadFunc = postLoad;
