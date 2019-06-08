@@ -3,6 +3,7 @@ let dataSets = { "recipes": false, "machineRecipes": false };
 let data = [];
 let ready = false;
 let history = true;
+// import URLSearchParams from './node_modules/@ungap/url-search-params';
 let urlQueryParams = new URLSearchParams(window.location.search);
 
 function loadData(postLoad) {
