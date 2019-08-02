@@ -5,8 +5,9 @@
 	width: 100%;
 	height: 56px;
 	padding: 0;
-	background: #673AB7;
-	box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+	background: var(--primary);
+	color: var(--primary-text);
+	box-shadow: 0 0 5px var(--secondary);
 	z-index: 50;
 }
 
@@ -17,7 +18,7 @@
 	font-size: 24px;
 	line-height: 56px;
 	font-weight: 400;
-	color: #FFF;
+	color: var(--primary-text);
 }
 
 .header nav {
@@ -32,17 +33,20 @@
 	padding: 0 15px;
 	min-width: 50px;
 	text-align: center;
-	background: rgba(255,255,255,0);
+	background: var(--primary-dark);
 	text-decoration: none;
-	color: #FFF;
+	color: var(--secondary-text);
 	will-change: background-color;
+	border-top-left-radius: 1em;
+	border-top-right-radius: 1em;
 }
 
 .header nav a:hover,
 .header nav a:active {
-	background: rgba(0,0,0,0.2);
+	background: var(--primary-light);
 }
 
 .header nav a.active {
-	background: rgba(0,0,0,0.4);
+	background: var(--primary-light);
+	color: var(--primary-light-text);
 }

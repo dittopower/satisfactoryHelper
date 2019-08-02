@@ -1,3 +1,22 @@
+/* 
+ * https://material.io/resources/color/#!/?view.left=0&view.right=0&primary.color=9E9E9E&secondary.color=B71C1C
+ * https://codepen.io/dittopower/pen/ZgJwgr
+ */
+:root {
+	--primary: #616161;
+	--primary-light: #bdbdbd;
+	--primary-dark: #424242;
+	--primary-text: #ffffff;
+	--primary-light-text: #000;
+
+	--secondary: #b71c1c;
+	--secondary-light: #f05545;
+	--secondary-dark: #7f0000;
+	--secondary-text: #ffffff;
+
+	--background: #FAFAFA;
+}
+
 html, body {
 	height: 100%;
 	width: 100%;
