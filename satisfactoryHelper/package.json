@@ -8,6 +8,7 @@
     "start:production": "npm run -s serve",
     "start:development": "npm run -s dev",
     "build": "preact build",
+    "build-watch": "preact watch",
     "serve": "preact build && preact serve",
     "dev": "preact watch",
     "lint": "eslint src",
