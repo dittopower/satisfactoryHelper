@@ -6,9 +6,10 @@ const Header = () => (
 	<header class={style.header}>
 		<h1>Satisfactory Helper</h1>
 		<nav>
-			<Link activeClassName={style.active} href="/">Recipe Explorer</Link>
-			<Link activeClassName={style.active} href="/profile">Visual Explorer</Link>
-			<Link activeClassName={style.active} href="/profile/john">Recipe Manager</Link>
+			<Link activeClassName={style.active} href="/">Search</Link>
+			<Link activeClassName={style.active} href="/explore">Recipe Explorer</Link>
+			<Link activeClassName={style.active} href="/visual">Visual Explorer</Link>
+			<Link activeClassName={style.active} href="/manager">Recipe Manager</Link>
 		</nav>
 	</header>
 );
